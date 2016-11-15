@@ -104,7 +104,7 @@ namespace LibraryTest
             Catalog.Add(patent4);
         }
 
-        private static void Show(IDocument[] catalog)
+        private static void Show(Document[] catalog)
         {
             foreach (var document in catalog)
             {

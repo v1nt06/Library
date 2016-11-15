@@ -2,7 +2,7 @@
 
 namespace Library
 {
-    public abstract class Document : IDocument
+    public abstract class Document : IComparable
     {
         public string Name { get; }
         public int PagesCount { get; }

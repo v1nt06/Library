@@ -48,7 +48,6 @@
     <Compile Include="Book.cs" />
     <Compile Include="Catalog.cs" />
     <Compile Include="Document.cs" />
-    <Compile Include="IDocument.cs" />
     <Compile Include="Newspaper.cs" />
     <Compile Include="Patent.cs" />
     <Compile Include="Person.cs" />

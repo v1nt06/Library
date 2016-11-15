@@ -10,5 +10,10 @@
             FirstName = firstName;
             LastName = lastName;
         }
+
+        public override string ToString()
+        {
+            return FirstName.Substring(0, 1).ToUpper() + ". " + LastName;
+        }
     }
 }

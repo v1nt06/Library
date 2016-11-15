@@ -15,5 +15,10 @@ namespace Library
             Number = number;
             ISSN = issn;
         }
+
+        public override string ToString()
+        {
+            return $"{Name} №{Number}";
+        }
     }
 }

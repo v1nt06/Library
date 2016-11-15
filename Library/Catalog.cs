@@ -4,7 +4,7 @@ namespace Library
 {
     public static class Catalog
     {
-        private static IDocument[] documents = new IDocument[0];
+        private static Document[] documents = new Document[0];
 
         // 1. Добавление записей в каталог.
         public static void Add(Document newDocument)
@@ -58,13 +58,13 @@ namespace Library
             не возможно (например в консоль или в какой-нибудь контрол на форме). Так что этот метод 
             просто возвращает содержимое каталога. Вывод реализован в классе-эмуляторе LibraryEmulator.
         */
-        public static IDocument[] GetCatalogContent()
+        public static Document[] GetCatalogContent()
         {
             return documents;
         }
         
         // 4. Поиск по названию.
-        public static IDocument[] FindByName(string name)
+        public static Document[] FindByName(string name)
         {
             var findedDocsCount = 0;
             foreach (var document in documents)
@@ -75,7 +75,7 @@ namespace Library
                 }
             }
 
-            var findedDocuments = new IDocument[findedDocsCount];
+            var findedDocuments = new Document[findedDocsCount];
             for (var i = 0; i < findedDocuments.Length; i++)
             {
                 foreach (var document in documents)
@@ -97,7 +97,7 @@ namespace Library
             Так как тут написано "записей", а не книг, то я буду группировать все типы (в том числе и патенты у которых нет
             такого понятия как "год издания").
         */
-        public static IDocument[] GetSortedContentByPublicationDateAsc()
+        public static Document[] GetSortedContentByPublicationDateAsc()
         {
             var sortedArray = new Document[documents.Length];
             Array.Copy(documents, sortedArray, documents.Length);
@@ -106,7 +106,7 @@ namespace Library
         }
 
         // 5. Сортировка по году выпуска в обратном порядке.
-        public static IDocument[] GetSortedContentByPublicationDateDesc()
+        public static Document[] GetSortedContentByPublicationDateDesc()
         {
             var sortedArray = GetSortedContentByPublicationDateAsc();
             Array.Reverse(sortedArray);
