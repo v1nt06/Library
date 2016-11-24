@@ -7,7 +7,7 @@ namespace Library
         private static Document[] documents = new Document[0];
 
         // 1. Добавление записей в каталог.
-        public static void Add(Document newDocument)
+        public static void Add(Document document)
         {
             var arrayHaveGaps = false;
 
@@ -25,12 +25,12 @@ namespace Library
 
             if (arrayHaveGaps)
             {
-                documents[i] = newDocument;
+                documents[i] = document;
             }
             else
             {
                 Array.Resize(ref documents, documents.Length + 1);
-                documents[documents.Length - 1] = newDocument;
+                documents[documents.Length - 1] = document;
             }
         }
 
@@ -255,8 +255,5 @@ namespace Library
 
             return uniquePublishers;
         }
-
-        // 8. Группировка записей по годам издания.
-        
     }
 }
