@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Library.Tests
@@ -11,7 +12,7 @@ namespace Library.Tests
         private const string RegistrationNumber = "Т-1";
         private readonly DateTime applicationDate = new DateTime(1950, 1, 1);
         private const string Country = "Франция";
-        private readonly Person[] inventors = {new Person("Александр", "Белл")};
+        private readonly IList<Person> inventors = new List<Person> { new Person("Alexander", "Bell") };
         private readonly DateTime publicationDate = new DateTime(1950, 1, 1);
 
         [TestMethod]
@@ -25,9 +26,9 @@ namespace Library.Tests
             Assert.AreEqual(applicationDate, patent.ApplicationDate);
             Assert.AreEqual(Country, patent.Country);
             Assert.AreEqual(publicationDate, patent.PublicationDate);
-            Assert.AreEqual(inventors.Length, patent.Inventors.Length);
+            Assert.AreEqual(inventors.Count, patent.Inventors.Count);
 
-            for (var i = 0; i < inventors.Length; i++)
+            for (var i = 0; i < inventors.Count; i++)
             {
                 Assert.AreEqual(inventors[i].FirstName, patent.Inventors[i].FirstName);
                 Assert.AreEqual(inventors[i].LastName, patent.Inventors[i].LastName);
@@ -67,7 +68,7 @@ namespace Library.Tests
         [ExpectedException(typeof(ArgumentException))]
         public void CreatePatentWithEmptyInventors()
         {
-            new Patent(Name, PagesCount, RegistrationNumber, applicationDate, Country, new Person[1], publicationDate);
+            new Patent(Name, PagesCount, RegistrationNumber, applicationDate, Country, new List<Person>(), publicationDate);
         }
 
         [TestMethod]

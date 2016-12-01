@@ -1,94 +1,39 @@
-﻿using System;
+﻿using System.Collections.Generic;
+using System.Linq;
 
 namespace Library
 {
     public static class Catalog
     {
-        private static Document[] documents = new Document[0];
+        private static readonly List<Document> Documents = new List<Document>();
 
         // 1. Добавление записей в каталог.
         public static void Add(Document document)
         {
-            var arrayHaveGaps = false;
-
-            var i = 0;
-
-            for (; i < documents.Length; i++)
-            {
-                if (documents[i] != null)
-                {
-                    continue;
-                }
-                arrayHaveGaps = true;
-                break;
-            }
-
-            if (arrayHaveGaps)
-            {
-                documents[i] = document;
-            }
-            else
-            {
-                Array.Resize(ref documents, documents.Length + 1);
-                documents[documents.Length - 1] = document;
-            }
+            Documents.Add(document);
         }
 
         // 2. Удаление записей из каталога.
         public static void Remove(int index)
         {
-            if (index + 1 == documents.Length)
-            {
-                Array.Resize(ref documents, documents.Length - 1);
-            }
-            else
-            {
-                documents[index] = null;
-                for (var i = index; i < documents.Length - 1; i++)
-                {
-                    documents[i] = documents[i + 1];
-                }
-                Array.Resize(ref documents, documents.Length - 1);
-            }
+            Documents.Remove(Documents[index]);
         }
 
         // 3. Просмотр каталога.
         /* 
             Так как у нас проект типа Class library, то вывод какой-либо информации реализовать
             не возможно (например в консоль или в какой-нибудь контрол на форме). Так что этот метод 
-            просто возвращает содержимое каталога. Вывод реализован в классе-эмуляторе LibraryEmulator.
+            просто возвращает содержимое каталога.
         */
-        public static Document[] GetCatalogContent()
+        public static IEnumerable<Document> GetCatalogContent()
         {
-            return documents;
+            return Documents;
         }
-        
+
         // 4. Поиск по названию.
-        public static Document[] FindByName(string name)
+        public static IEnumerable<Document> FindByName(string name)
         {
-            var findedDocsCount = 0;
-            foreach (var document in documents)
-            {
-                if (document.Name == name)
-                {
-                    findedDocsCount++;
-                }
-            }
-
-            var findedDocuments = new Document[findedDocsCount];
-            for (var i = 0; i < findedDocuments.Length; i++)
-            {
-                foreach (var document in documents)
-                {
-                    if (document.Name == name)
-                    {
-                        findedDocuments[i] = document;
-                    }
-                }
-                
-            }
-
-            return findedDocuments;
+            return Documents.Where(d => d.Name == name);
         }
 
         // 5. Сортировка по году выпуска в прямом порядке.
@@ -97,163 +42,34 @@ namespace Library
             Так как тут написано "записей", а не книг, то я буду группировать все типы (в том числе и патенты у которых нет
             такого понятия как "год издания").
         */
-        public static Document[] GetSortedContentByPublicationDateAsc()
+        public static IEnumerable<Document> GetSortedContentByPublicationDateAsc()
         {
-            var sortedArray = new Document[documents.Length];
-            Array.Copy(documents, sortedArray, documents.Length);
-            Array.Sort(sortedArray);
-            return sortedArray;
+            return Documents.OrderBy(d => d.PublicationDate);
         }
 
         // 5. Сортировка по году выпуска в обратном порядке.
-        public static Document[] GetSortedContentByPublicationDateDesc()
+        public static IEnumerable<Document> GetSortedContentByPublicationDateDesc()
         {
-            var sortedArray = GetSortedContentByPublicationDateAsc();
-            Array.Reverse(sortedArray);
-            return sortedArray;
+            return Documents.OrderByDescending(d => d.PublicationDate);
         }
 
         // 6. Поиск всех книг данного автора (в том числе, тех, у которых он является соавтором).
-        public static Book[] GetBooksByAuthor(Person suitableAuthor)
+        public static IEnumerable<Book> GetBooksByAuthor(Person suitableAuthor)
         {
-            var books = GetBooks();
-            var suitableBooksCount = 0;
-            foreach (var book in books)
-            {
-                foreach (var author in book.Authors)
-                {
-                    if (author.FirstName == suitableAuthor.FirstName && author.LastName == suitableAuthor.LastName)
-                    {
-                        suitableBooksCount++;
-                    }
-                }
-            }
-
-            var suitableBooks = new Book[suitableBooksCount];
-            var currentSuitableBookIndex = 0;
-            foreach (var book in books)
-            {
-                foreach (var author in book.Authors)
-                {
-                    if (author.FirstName == suitableAuthor.FirstName && author.LastName == suitableAuthor.LastName)
-                    {
-                        suitableBooks[currentSuitableBookIndex] = book;
-                        currentSuitableBookIndex++;
-                    }
-                }
-            }
-
-            return suitableBooks;
-        }
-
-        private static Book[] GetBooks()
-        {
-            var booksCount = 0;
-            foreach (var document in documents)
-            {
-                if (document is Book)
-                {
-                    booksCount++;
-                }
-            }
-
-            var books = new Book[booksCount];
-            var currentBookIndex = 0;
-            foreach (var document in documents)
-            {
-                if (document is Book)
-                {
-                    books[currentBookIndex] = (Book)document;
-                    currentBookIndex++;
-                }
-            }
-
-            return books;
+            return
+                Documents.Where(
+                    d =>
+                        d is Book &&
+                        ((Book)d).Authors.Any(
+                            a => a.FirstName == suitableAuthor.FirstName && a.LastName == suitableAuthor.LastName))
+                    .Cast<Book>();
         }
 
         // 7. Вывод всех книг, название издательства которых начинаются с заданного набора символов, с группировкой по издательству.
-        public static Book[] GetBooksByPartOfPublisher(string partOfPublisherName)
+        public static IEnumerable<Book> GetBooksByPartOfPublisher(string partOfPublisherName)
         {
-            var books = GetBooks();
-            var suitableBooksCount = 0;
-            foreach (var book in books)
-            {
-                if (book.Publisher.StartsWith(partOfPublisherName))
-                {
-                    suitableBooksCount++;
-                }
-            }
-
-            var suitableBooks = new Book[suitableBooksCount];
-            var currentBookIndex = 0;
-            foreach (var book in books)
-            {
-                if (book.Publisher.StartsWith(partOfPublisherName))
-                {
-                    suitableBooks[currentBookIndex] = book;
-                    currentBookIndex++;
-                }
-            }
-
-            return GroupBooksByPublisher(suitableBooks);
-        }
-
-        private static Book[] GroupBooksByPublisher(Book[] books)
-        {
-            var publishers = new string[books.Length];
-            for (var i = 0; i < books.Length; i++)
-            {
-                publishers[i] = books[i].Publisher;
-            }
-            var uniquePublishers = GetUniquePublishers(publishers);
-
-            var groupedBooks = new Book[books.Length];
-            for (var i = 0; i < uniquePublishers.Length; i++)
-            {
-                for (var j = 0; j < books.Length; j++)
-                {
-                    if (books[j].Publisher == uniquePublishers[i])
-                    {
-                        for (var k = 0; k < groupedBooks.Length; k++)
-                        {
-                            if (groupedBooks[k] == null)
-                            {
-                                groupedBooks[k] = books[j];
-                                break;
-                            }
-                        }
-                    }
-                }
-            }
-
-            return groupedBooks;
-        }
-
-        private static string[] GetUniquePublishers(string[] publishers)
-        {
-            var doublesCount = 0;
-            for (var i = 0; i < publishers.Length; i++)
-            {
-                for (var j = i + 1; j < publishers.Length; j++)
-                {
-                    if (!string.IsNullOrEmpty(publishers[i]) && publishers[i] == publishers[j])
-                    {
-                        publishers[j] = null;
-                        doublesCount++;
-                    }
-                }
-            }
-
-            var uniquePublishers = new string[publishers.Length - doublesCount];
-            var uniquePublisherIndex = 0;
-            foreach (var publisher in publishers)
-            {
-                if (string.IsNullOrEmpty(publisher)) continue;
-                uniquePublishers[uniquePublisherIndex] = publisher;
-                uniquePublisherIndex++;
-            }
-
-            return uniquePublishers;
+            return Documents.Where(d => d is Book && ((Book)d).Publisher.StartsWith(partOfPublisherName))
+                .Cast<Book>().OrderBy(b => b.Publisher);
         }
     }
 }

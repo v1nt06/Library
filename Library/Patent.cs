@@ -1,29 +1,28 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Library
 {
     public sealed class Patent : Document
     {
-        public Person[] Inventors { get; }
+        public IList<Person> Inventors { get; }
         public string Country { get; }
         public string RegistrationNumber { get; }
         public DateTime ApplicationDate { get; }
 
         public Patent(string name, int pagesCount, string registrationNumber,
-            DateTime applicationDate, string country, Person[] inventors, DateTime publicationDate) : 
+            DateTime applicationDate, string country, IList<Person> inventors, DateTime publicationDate) : 
             base(name, pagesCount, publicationDate)
         {
-            if (inventors == null)
+            if (inventors == null || inventors.Count == 0)
             {
                 throw new ArgumentException("Inventors should contains at least one person", "inventors");
             }
 
-            foreach (var inventor in inventors)
+            if (inventors.Any(inventor => inventor == null))
             {
-                if (inventor == null)
-                {
-                    throw new ArgumentException("Inventor shouldn't be null", "inventors");
-                }
+                throw new ArgumentException("Inventor shouldn't be null", "inventors");
             }
 
             if (string.IsNullOrWhiteSpace(country))

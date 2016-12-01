@@ -1,17 +1,19 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Library
 {
     public sealed class Book : PrintedProduct
     {
-        public Person[] Authors { get; }
+        public IList<Person> Authors { get; }
         public string ISBN { get; }
 
         public Book(string name, int pagesCount, string placeOfPublication, string publisher,
-            string isbn, Person[] authors, DateTime publicationDate) :
+            string isbn, IList<Person> authors, DateTime publicationDate) :
             base(name, pagesCount, placeOfPublication, publisher, publicationDate)
         {
-            if (authors == null || authors.Length == 0)
+            if (authors == null || authors.Count == 0)
             {
                 throw new ArgumentException("Authors should contains at least one person", "authors");
             }
@@ -21,12 +23,9 @@ namespace Library
                 throw new ArgumentException("Place of publication shouldn't be empty", "placeOfPublication");
             }
 
-            foreach (var author in authors)
+            if (authors.Any(author => author == null))
             {
-                if (author == null)
-                {
-                    throw new ArgumentException("Author shouldn't be null", "author");
-                }
+                throw new ArgumentException("Author shouldn't be null", "author");
             }
 
             Authors = authors;
@@ -36,19 +35,10 @@ namespace Library
         public override string ToString()
         {
             var name = Name;
-            if (Authors.Length != 0)
+            if (Authors.Count > 0)
             {
-                name += " - ";
-                for (var i = 0; i < Authors.Length; i++)
-                {
-                    name += Authors[i];
-                    if (i != Authors.Length - 1)
-                    {
-                        name += ", ";
-                    }
-                }
+                name += " - " + string.Join(", ", Authors);
             }
-
             return name;
         }
     }

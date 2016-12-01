@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Library.Tests
@@ -11,7 +12,7 @@ namespace Library.Tests
         private const string PlaceOfPublication = "Москва";
         private const string Publisher = "Издательство";
         private const string ISBN = "ISBN 978-3-16-148410-0";
-        private readonly Person[] authors = {new Person("Лев", "Толстой")};
+        private readonly IList<Person> authors = new List<Person> { new Person("Lev", "Tolstoy") };
         private readonly DateTime publicationDate = new DateTime(1900, 1, 1);
 
         [TestMethod]
@@ -25,9 +26,9 @@ namespace Library.Tests
             Assert.AreEqual(Publisher, book.Publisher);
             Assert.AreEqual(ISBN, book.ISBN);
             Assert.AreEqual(publicationDate, book.PublicationDate);
-            Assert.AreEqual(authors.Length, book.Authors.Length);
+            Assert.AreEqual(authors.Count, book.Authors.Count);
 
-            for (var i = 0; i < authors.Length; i++)
+            for (var i = 0; i < authors.Count; i++)
             {
                 Assert.AreEqual(authors[i].FirstName, book.Authors[i].FirstName);
                 Assert.AreEqual(authors[i].LastName, book.Authors[i].LastName);
@@ -38,8 +39,8 @@ namespace Library.Tests
         public void BookToString()
         {
             var book = new Book(Name, PagesCount, PlaceOfPublication, Publisher, ISBN, authors, publicationDate);
-            
-            Assert.AreEqual("Война и мир - Л. Толстой", book.ToString());
+
+            Assert.AreEqual("Война и мир - L. Tolstoy", book.ToString());
         }
 
         [TestMethod]
@@ -67,7 +68,7 @@ namespace Library.Tests
         [ExpectedException(typeof(ArgumentException))]
         public void CreateBookWithEmptyAuthors()
         {
-            new Book(Name, PagesCount, PlaceOfPublication, Publisher, ISBN, new Person[1], publicationDate);
+            new Book(Name, PagesCount, PlaceOfPublication, Publisher, ISBN, new List<Person>(), publicationDate);
         }
 
         [TestMethod]
