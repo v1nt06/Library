@@ -9,10 +9,10 @@ namespace Library.Tests
         private const string Name = "Телефон";
         private const int PagesCount = 1274;
         private const string RegistrationNumber = "Т-1";
-        private readonly DateTime applicationDate = new DateTime(1930, 10, 5);
+        private readonly DateTime applicationDate = new DateTime(1950, 1, 1);
         private const string Country = "Франция";
         private readonly Person[] inventors = {new Person("Александр", "Белл")};
-        private readonly DateTime publicationDate = new DateTime(1869, 1, 1);
+        private readonly DateTime publicationDate = new DateTime(1950, 1, 1);
 
         [TestMethod]
         public void CreatePatent()
@@ -40,6 +40,62 @@ namespace Library.Tests
             var patent = new Patent(Name, PagesCount, RegistrationNumber, applicationDate, Country, inventors, publicationDate);
 
             Assert.AreEqual("Телефон №Т-1", patent.ToString());
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentException))]
+        public void CreatePatentWithoutName()
+        {
+            new Patent(null, PagesCount, RegistrationNumber, applicationDate, Country, inventors, publicationDate);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentException))]
+        public void CreatePatentWithEmptyName()
+        {
+            new Patent(" ", PagesCount, RegistrationNumber, applicationDate, Country, inventors, publicationDate);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentException))]
+        public void CreatePatentWithoutInventors()
+        {
+            new Patent(Name, PagesCount, RegistrationNumber, applicationDate, Country, null, publicationDate);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentException))]
+        public void CreatePatentWithEmptyInventors()
+        {
+            new Patent(Name, PagesCount, RegistrationNumber, applicationDate, Country, new Person[1], publicationDate);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentException))]
+        public void CreatePatentWithoutCountry()
+        {
+            new Patent(Name, PagesCount, RegistrationNumber, applicationDate, null, inventors, publicationDate);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentException))]
+        public void CreatePatentWithEmptyCountry()
+        {
+            new Patent(Name, PagesCount, RegistrationNumber, applicationDate, " ", inventors, publicationDate);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentOutOfRangeException))]
+        public void CreatePatentWithApplicationDateBelow1950()
+        {
+            new Patent(Name, PagesCount, RegistrationNumber, new DateTime(1949, 12, 31), Country, inventors, publicationDate);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentOutOfRangeException))]
+        public void CreatePatentWithPublicationDateBelow1950()
+        {
+            new Patent(Name, PagesCount, RegistrationNumber, applicationDate, Country, inventors, new DateTime(1949, 12, 31));
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System;
 
 namespace Library.Tests
 {
@@ -23,6 +24,34 @@ namespace Library.Tests
             var person = new Person(FirstName, LastName);
 
             Assert.AreEqual("Л. Толстой", person.ToString());
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentException))]
+        public void CreatePersonWithoutFirstName()
+        {
+            new Person(null, LastName);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentException))]
+        public void CreatePersonWithEmptyFirstName()
+        {
+            new Person(" ", LastName);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentException))]
+        public void CreatePersonWithoutLastName()
+        {
+            new Person(FirstName, null);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentException))]
+        public void CreatePersonWithEmptyLastName()
+        {
+            new Person(FirstName, " ");
         }
     }
 }

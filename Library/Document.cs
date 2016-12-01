@@ -11,6 +11,11 @@ namespace Library
 
         protected Document(string name, int pagesCount, DateTime publicationDate)
         {
+            if (string.IsNullOrWhiteSpace(name))
+            {
+                throw new ArgumentException("Name shouldn't be empty", "name");
+            }
+
             Name = name;
             PagesCount = pagesCount;
             PublicationDate = publicationDate;

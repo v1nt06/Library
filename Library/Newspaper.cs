@@ -11,6 +11,11 @@ namespace Library
             string issn, int number, DateTime pulicationDate) : 
             base(name, pagesCount, placeOfPublication, publisher, pulicationDate)
         {
+            if (number < 1)
+            {
+                throw new ArgumentException("Number should be positive", "number");
+            }
+
             Number = number;
             ISSN = issn;
         }

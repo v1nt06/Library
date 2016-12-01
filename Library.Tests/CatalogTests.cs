@@ -133,7 +133,7 @@ namespace Library.Tests
         private Book CreateTestBook()
         {
             return new Book("Война и мир", 1274, "Москва", "Издательство", "ISBN 978-3-16-148410-0",
-                new[] { new Person("Лев", "Толстой") }, new DateTime(1869, 1, 1));
+                new[] { new Person("Лев", "Толстой") }, new DateTime(1900, 1, 1));
         }
 
         private void ResetCatalog()

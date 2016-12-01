@@ -11,6 +11,24 @@ namespace Library
             string isbn, Person[] authors, DateTime publicationDate) :
             base(name, pagesCount, placeOfPublication, publisher, publicationDate)
         {
+            if (authors == null || authors.Length == 0)
+            {
+                throw new ArgumentException("Authors should contains at least one person", "authors");
+            }
+
+            if (string.IsNullOrWhiteSpace(placeOfPublication))
+            {
+                throw new ArgumentException("Place of publication shouldn't be empty", "placeOfPublication");
+            }
+
+            foreach (var author in authors)
+            {
+                if (author == null)
+                {
+                    throw new ArgumentException("Author shouldn't be null", "author");
+                }
+            }
+
             Authors = authors;
             ISBN = isbn;
         }

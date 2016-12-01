@@ -1,4 +1,6 @@
-﻿namespace Library
+﻿using System;
+
+namespace Library
 {
     public sealed class Person
     {
@@ -7,6 +9,16 @@
 
         public Person(string firstName, string lastName)
         {
+            if (string.IsNullOrWhiteSpace(firstName))
+            {
+                throw new ArgumentException("First name shouldn't be empty", "firstName");
+            }
+
+            if (string.IsNullOrWhiteSpace(lastName))
+            {
+                throw new ArgumentException("Last name shouldn't be empty", "firstName");
+            }
+
             FirstName = firstName;
             LastName = lastName;
         }

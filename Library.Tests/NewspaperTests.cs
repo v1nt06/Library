@@ -35,5 +35,47 @@ namespace Library.Tests
 
             Assert.AreEqual("Известия №12", newspaper.ToString());
         }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentException))]
+        public void CreateNewspaperWithoutName()
+        {
+            new Newspaper(null, PagesCount, PlaceOfPublication, Publisher, ISSN, Number, publicationDate);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentException))]
+        public void CreateNewspaperWithEmptyName()
+        {
+            new Newspaper(" ", PagesCount, PlaceOfPublication, Publisher, ISSN, Number, publicationDate);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentException))]
+        public void CreateNewspaperWithoutPublisher()
+        {
+            new Newspaper(Name, PagesCount, PlaceOfPublication, null, ISSN, Number, publicationDate);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentException))]
+        public void CreateNewspaperWithEmptytPublisher()
+        {
+            new Newspaper(Name, PagesCount, PlaceOfPublication, " ", ISSN, Number, publicationDate);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentOutOfRangeException))]
+        public void CreateNewspaperWithPublicationDateBelow1900()
+        {
+            new Newspaper(Name, PagesCount, PlaceOfPublication, Publisher, ISSN, Number, new DateTime(1899, 12, 31));
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentException))]
+        public void CreateNewspaperWithNonPositiveNumber()
+        {
+            new Newspaper(Name, PagesCount, PlaceOfPublication, Publisher, ISSN, 0, publicationDate);
+        }
     }
 }

@@ -13,6 +13,16 @@ namespace Library
             string publisher, DateTime publicationDate) :
             base(name, pagesCount, publicationDate)
         {
+            if (string.IsNullOrWhiteSpace(publisher))
+            {
+                throw new ArgumentException("Publisher shouldn't be empty", "publisher");
+            }
+
+            if (publicationDate.Year < 1900)
+            {
+                throw new ArgumentOutOfRangeException("publicationDate", "Publication date should be greater than 1899 year");
+            }
+
             PlaceOfPublication = placeOfPublication;
             Publisher = publisher;
         }
