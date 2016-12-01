@@ -77,5 +77,16 @@ namespace Library.Tests
         {
             new Newspaper(Name, PagesCount, PlaceOfPublication, Publisher, ISSN, 0, publicationDate);
         }
+
+        [TestMethod]
+        public void ChangeNewspaperAnnotation()
+        {
+            var newspaper = new Newspaper(Name, PagesCount, PlaceOfPublication, Publisher, ISSN, Number, publicationDate);
+
+            var newAnnotation = "New annotation";
+            newspaper.ChangeAnnotation(newAnnotation);
+
+            Assert.AreEqual(newAnnotation, newspaper.Annotation);
+        }
     }
 }

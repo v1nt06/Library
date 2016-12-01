@@ -98,5 +98,16 @@ namespace Library.Tests
         {
             new Patent(Name, PagesCount, RegistrationNumber, applicationDate, Country, inventors, new DateTime(1949, 12, 31));
         }
+
+        [TestMethod]
+        public void ChangePatentAnnotation()
+        {
+            var patent = new Patent(Name, PagesCount, RegistrationNumber, applicationDate, Country, inventors, publicationDate);
+
+            var newAnnotation = "New annotation";
+            patent.ChangeAnnotation(newAnnotation);
+
+            Assert.AreEqual(newAnnotation, patent.Annotation);
+        }
     }
 }

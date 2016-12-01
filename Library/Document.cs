@@ -2,7 +2,7 @@
 
 namespace Library
 {
-    public abstract class Document : IComparable
+    public abstract class Document
     {
         public string Name { get; }
         public int PagesCount { get; }
@@ -26,20 +26,9 @@ namespace Library
             return Name;
         }
 
-        public int CompareTo(object obj)
+        public void ChangeAnnotation(string newAnnotation)
         {
-            if (!(obj is Document)) return -1;
-            if (PublicationDate > ((Document) obj).PublicationDate)
-            {
-                return 1;
-            }
-
-            if (PublicationDate < ((Document) obj).PublicationDate)
-            {
-                return -1;
-            }
-
-            return 0;
+            Annotation = newAnnotation;
         }
     }
 }

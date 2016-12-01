@@ -105,5 +105,16 @@ namespace Library.Tests
         {
             new Book(Name, PagesCount, PlaceOfPublication, Publisher, ISBN, authors, new DateTime(1899, 12, 31));
         }
+
+        [TestMethod]
+        public void ChangeBookAnnotation()
+        {
+            var book = new Book(Name, PagesCount, PlaceOfPublication, Publisher, ISBN, authors, publicationDate);
+
+            var newAnnotation = "New annotation";
+            book.ChangeAnnotation(newAnnotation);
+
+            Assert.AreEqual(newAnnotation, book.Annotation);
+        }
     }
 }
