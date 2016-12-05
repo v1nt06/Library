@@ -1,5 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Text;
 
 namespace Library
 {
@@ -70,6 +73,70 @@ namespace Library
         {
             return Documents.Where(d => d is Book && ((Book)d).Publisher.StartsWith(partOfPublisherName))
                 .Cast<Book>().OrderBy(b => b.Publisher);
+        }
+
+        public static void Save(string actualFile)
+        {
+            var sb = new StringBuilder();
+            foreach (var document in Documents)
+            {
+                if (document is Book)
+                {
+                    var book = (Book)document;
+                    sb.Append("Book;")
+                        .Append(book.ISBN).Append(";")
+                        .Append(book.Annotation ?? "null").Append(";")
+                        .Append(book.Name).Append(";")
+                        .Append(book.PagesCount).Append(";")
+                        .Append(book.PlaceOfPublication).Append(";")
+                        .Append(book.PublicationDate.ToString("yyyy-MM-dd")).Append(";")
+                        .Append(book.Publisher).Append(";");
+
+                    for (var i = 0; i < book.Authors.Count; i++)
+                    {
+                        sb.Append(book.Authors[i].FirstName).Append(",");
+                        sb.Append(book.Authors[i].LastName)
+                            .Append(i != book.Authors.Count - 1 ? ";" : Environment.NewLine);
+                    }
+
+                }
+                else if (document is Newspaper)
+                {
+                    var newspaper = (Newspaper)document;
+                    sb.Append("Newspaper").Append(";")
+                        .Append(newspaper.ISSN).Append(";")
+                        .Append(newspaper.Number).Append(";")
+                        .Append(newspaper.Name).Append(";")
+                        .Append(newspaper.Annotation ?? "null").Append(";")
+                        .Append(newspaper.PagesCount).Append(";")
+                        .Append(newspaper.PlaceOfPublication).Append(";")
+                        .Append(newspaper.PublicationDate.ToString("yyyy-MM-dd")).Append(";")
+                        .Append(newspaper.Publisher).Append(Environment.NewLine);
+
+                    File.WriteAllText(actualFile, sb.ToString());
+                }
+                else
+                {
+                    var patent = (Patent) document;
+                    sb.Append("Patent").Append(";")
+                        .Append(patent.ApplicationDate.ToString("yyyy-MM-dd")).Append(";")
+                        .Append(patent.Country).Append(";")
+                        .Append(patent.RegistrationNumber).Append(";")
+                        .Append(patent.Name).Append(";")
+                        .Append(patent.Annotation ?? "null").Append(";")
+                        .Append(patent.PagesCount).Append(";")
+                        .Append(patent.PublicationDate.ToString("yyyy-MM-dd")).Append(";");
+
+                    for (var i = 0; i < patent.Inventors.Count; i++)
+                    {
+                        sb.Append(patent.Inventors[i].FirstName).Append(",");
+                        sb.Append(patent.Inventors[i].LastName)
+                            .Append(i != patent.Inventors.Count - 1 ? ";" : Environment.NewLine);
+                    }
+                }
+
+                File.WriteAllText(actualFile, sb.ToString());
+            }
         }
     }
 }

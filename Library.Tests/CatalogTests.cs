@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -129,6 +130,24 @@ namespace Library.Tests
             CollectionAssert.AreEqual(documents, Catalog.GetBooksByPartOfPublisher("Изд").ToList());
 
             ResetCatalog();
+        }
+
+        [TestMethod]
+        public void SaveCatalogContent()
+        {
+            var book = CreateTestBook();
+            var newspaper = new Newspaper("Коммерсант", 30, "Москва", "Издательство", "ISSN-1", 1, new DateTime(2016, 12, 1));
+            var patent = new Patent("Телефон", 50, "T-1", new DateTime(2016, 12, 1), "Россия",
+                new List<Person> { new Person("Ivan", "Ivanov") }, new DateTime(2016, 12, 1));
+            Catalog.Add(book);
+            Catalog.Add(newspaper);
+            Catalog.Add(patent);
+            var expectedFile = File.ReadAllBytes("expectedFile");
+
+            Catalog.Save("actualFile");
+
+            var actualFile = File.ReadAllBytes("actualFile");
+            CollectionAssert.AreEqual(expectedFile, actualFile);
         }
 
         private Book CreateTestBook()
