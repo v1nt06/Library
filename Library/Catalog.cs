@@ -77,65 +77,77 @@ namespace Library
 
         public static void Save(string actualFile)
         {
-            var sb = new StringBuilder();
-            foreach (var document in Documents)
+            File.Delete(actualFile);
+            using (var sw = File.AppendText(actualFile))
             {
-                if (document is Book)
+                foreach (var document in Documents)
                 {
-                    var book = (Book)document;
-                    sb.Append("Book;")
-                        .Append(book.ISBN).Append(";")
-                        .Append(book.Annotation ?? "null").Append(";")
-                        .Append(book.Name).Append(";")
-                        .Append(book.PagesCount).Append(";")
-                        .Append(book.PlaceOfPublication).Append(";")
-                        .Append(book.PublicationDate.ToString("yyyy-MM-dd")).Append(";")
-                        .Append(book.Publisher).Append(";");
-
-                    for (var i = 0; i < book.Authors.Count; i++)
+                    if (document is Book)
                     {
-                        sb.Append(book.Authors[i].FirstName).Append(",");
-                        sb.Append(book.Authors[i].LastName)
-                            .Append(i != book.Authors.Count - 1 ? ";" : Environment.NewLine);
+                        var sb = new StringBuilder();
+                        var book = (Book) document;
+                        sb.Append("Book;")
+                            .Append(book.ISBN).Append(";")
+                            .Append(book.Annotation ?? "null").Append(";")
+                            .Append(book.Name).Append(";")
+                            .Append(book.PagesCount).Append(";")
+                            .Append(book.PlaceOfPublication).Append(";")
+                            .Append(book.PublicationDate.ToString("yyyy-MM-dd")).Append(";")
+                            .Append(book.Publisher).Append(";");
+
+                        foreach (var author in book.Authors)
+                        {
+                            sb.Append(author.FirstName).Append(",");
+                            sb.Append(author.LastName).Append(";");
+                        }
+
+                        sb.Append(sb.ToString().GetHashCode());
+
+                        sw.WriteLine(sb);
+
                     }
-
-                }
-                else if (document is Newspaper)
-                {
-                    var newspaper = (Newspaper)document;
-                    sb.Append("Newspaper").Append(";")
-                        .Append(newspaper.ISSN).Append(";")
-                        .Append(newspaper.Number).Append(";")
-                        .Append(newspaper.Name).Append(";")
-                        .Append(newspaper.Annotation ?? "null").Append(";")
-                        .Append(newspaper.PagesCount).Append(";")
-                        .Append(newspaper.PlaceOfPublication).Append(";")
-                        .Append(newspaper.PublicationDate.ToString("yyyy-MM-dd")).Append(";")
-                        .Append(newspaper.Publisher).Append(Environment.NewLine);
-
-                    File.WriteAllText(actualFile, sb.ToString());
-                }
-                else
-                {
-                    var patent = (Patent) document;
-                    sb.Append("Patent").Append(";")
-                        .Append(patent.ApplicationDate.ToString("yyyy-MM-dd")).Append(";")
-                        .Append(patent.Country).Append(";")
-                        .Append(patent.RegistrationNumber).Append(";")
-                        .Append(patent.Name).Append(";")
-                        .Append(patent.Annotation ?? "null").Append(";")
-                        .Append(patent.PagesCount).Append(";")
-                        .Append(patent.PublicationDate.ToString("yyyy-MM-dd")).Append(";");
-
-                    for (var i = 0; i < patent.Inventors.Count; i++)
+                    else if (document is Newspaper)
                     {
-                        sb.Append(patent.Inventors[i].FirstName).Append(",");
-                        sb.Append(patent.Inventors[i].LastName)
-                            .Append(i != patent.Inventors.Count - 1 ? ";" : Environment.NewLine);
+                        var sb = new StringBuilder();
+                        var newspaper = (Newspaper) document;
+                        sb.Append("Newspaper").Append(";")
+                            .Append(newspaper.ISSN).Append(";")
+                            .Append(newspaper.Number).Append(";")
+                            .Append(newspaper.Name).Append(";")
+                            .Append(newspaper.Annotation ?? "null").Append(";")
+                            .Append(newspaper.PagesCount).Append(";")
+                            .Append(newspaper.PlaceOfPublication).Append(";")
+                            .Append(newspaper.PublicationDate.ToString("yyyy-MM-dd")).Append(";")
+                            .Append(newspaper.Publisher).Append(";");
+
+                        sb.Append(sb.ToString().GetHashCode());
+
+                        sw.WriteLine(sb);
+                    }
+                    else
+                    {
+                        var sb = new StringBuilder();
+                        var patent = (Patent) document;
+                        sb.Append("Patent").Append(";")
+                            .Append(patent.ApplicationDate.ToString("yyyy-MM-dd")).Append(";")
+                            .Append(patent.Country).Append(";")
+                            .Append(patent.RegistrationNumber).Append(";")
+                            .Append(patent.Name).Append(";")
+                            .Append(patent.Annotation ?? "null").Append(";")
+                            .Append(patent.PagesCount).Append(";")
+                            .Append(patent.PublicationDate.ToString("yyyy-MM-dd")).Append(";");
+
+                        for (var i = 0; i < patent.Inventors.Count; i++)
+                        {
+                            sb.Append(patent.Inventors[i].FirstName).Append(",");
+                            sb.Append(patent.Inventors[i].LastName).Append(";");
+                        }
+
+                        sb.Append(sb.ToString().GetHashCode());
+
+                        sw.WriteLine(sb);
                     }
                 }
-
-                File.WriteAllText(actualFile, sb.ToString());
             }
         }
     }
