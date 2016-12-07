@@ -6,8 +6,6 @@ namespace Library
     {
         public string PlaceOfPublication { get; }
         public string Publisher { get; }
-        public int YearOfPublishing => PublicationDate.Year;
-        
 
         protected PrintedProduct(string name, int pagesCount, string placeOfPublication,
             string publisher, DateTime publicationDate) :
@@ -25,6 +23,18 @@ namespace Library
 
             PlaceOfPublication = placeOfPublication;
             Publisher = publisher;
+        }
+
+        public override bool Equals(object obj)
+        {
+            var printedProduct = obj as PrintedProduct;
+            if (printedProduct == null)
+            {
+                return false;
+            }
+
+            return base.Equals(obj) && PlaceOfPublication == printedProduct.PlaceOfPublication
+                && Publisher == printedProduct.Publisher;
         }
     }
 }

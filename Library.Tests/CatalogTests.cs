@@ -148,6 +148,46 @@ namespace Library.Tests
 
             var actualFile = File.ReadAllBytes("actualFile");
             CollectionAssert.AreEqual(expectedFile, actualFile);
+
+            ResetCatalog();
+        }
+
+        [TestMethod]
+        public void LoadCorrectDataToCatalog()
+        {
+            var book = CreateTestBook();
+            var newspaper = new Newspaper("Коммерсант", 30, "Москва", "Издательство", "ISSN-1", 1, new DateTime(2016, 12, 1));
+            var patent = new Patent("Телефон", 50, "T-1", new DateTime(2016, 12, 1), "Россия",
+                new List<Person> { new Person("Ivan", "Ivanov") }, new DateTime(2016, 12, 1));
+            var correctData = new List<Document> {book, newspaper, patent};
+
+            Catalog.Load("expectedFile", false);
+
+            CollectionAssert.AreEqual(correctData, Catalog.GetCatalogContent().ToList());
+
+            ResetCatalog();
+        }
+
+        [TestMethod]
+        public void LoadIncorrectDataToCatalogWithIgnoringErrors()
+        {
+            var newspaper = new Newspaper("Коммерсант", 30, "Москва", "Издательство", "ISSN-1", 1, new DateTime(2016, 12, 1));
+            var patent = new Patent("Телефон", 50, "T-1", new DateTime(2016, 12, 1), "Россия",
+                new List<Person> { new Person("Ivan", "Ivanov") }, new DateTime(2016, 12, 1));
+            var correctData = new List<Document> { newspaper, patent };
+
+            Catalog.Load("incorrectFile", true);
+
+            CollectionAssert.AreEqual(correctData, Catalog.GetCatalogContent().ToList());
+
+            ResetCatalog();
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(IOException))]
+        public void TryLoadIncorrectData()
+        {
+            Catalog.Load("incorrectFile", false);
         }
 
         private Book CreateTestBook()

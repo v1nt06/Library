@@ -30,5 +30,28 @@ namespace Library
         {
             Annotation = newAnnotation;
         }
+
+        public override bool Equals(object obj)
+        {
+            if (obj == null)
+            {
+                return false;
+            }
+
+            if (ReferenceEquals(obj, this))
+            {
+                return true;
+            }
+
+            if (GetType() != obj.GetType())
+            {
+                return false;
+            }
+
+            var document = (Document)obj;
+
+            return Name == document.Name && PagesCount == document.PagesCount
+                   && Annotation == document.Annotation && PublicationDate == document.PublicationDate;
+        }
     }
 }

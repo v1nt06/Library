@@ -24,5 +24,16 @@ namespace Library
         {
             return $"{Name} №{Number}";
         }
+
+        public override bool Equals(object obj)
+        {
+            var newspaper = obj as Newspaper;
+            if (newspaper == null)
+            {
+                return false;
+            }
+
+            return base.Equals(obj) && Number == newspaper.Number && ISSN == newspaper.ISSN;
+        }
     }
 }

@@ -50,5 +50,25 @@ namespace Library
         {
             return $"{Name} №{RegistrationNumber}";
         }
+
+        public override bool Equals(object obj)
+        {
+            var patent = obj as Patent;
+
+            if (Inventors.Count != patent?.Inventors.Count)
+            {
+                return false;
+            }
+
+            var areEqual = base.Equals(obj) && Country == patent.Country
+                && RegistrationNumber == patent.RegistrationNumber && ApplicationDate == patent.ApplicationDate;
+
+            for (var i = 0; i < Inventors.Count; i++)
+            {
+                areEqual = areEqual && Inventors[i].Equals(patent.Inventors[i]);
+            }
+
+            return areEqual;
+        }
     }
 }

@@ -85,7 +85,7 @@ namespace Library
                     if (document is Book)
                     {
                         var sb = new StringBuilder();
-                        var book = (Book) document;
+                        var book = (Book)document;
                         sb.Append("Book;")
                             .Append(book.ISBN).Append(";")
                             .Append(book.Annotation ?? "null").Append(";")
@@ -109,7 +109,7 @@ namespace Library
                     else if (document is Newspaper)
                     {
                         var sb = new StringBuilder();
-                        var newspaper = (Newspaper) document;
+                        var newspaper = (Newspaper)document;
                         sb.Append("Newspaper").Append(";")
                             .Append(newspaper.ISSN).Append(";")
                             .Append(newspaper.Number).Append(";")
@@ -127,7 +127,7 @@ namespace Library
                     else
                     {
                         var sb = new StringBuilder();
-                        var patent = (Patent) document;
+                        var patent = (Patent)document;
                         sb.Append("Patent").Append(";")
                             .Append(patent.ApplicationDate.ToString("yyyy-MM-dd")).Append(";")
                             .Append(patent.Country).Append(";")
@@ -137,10 +137,10 @@ namespace Library
                             .Append(patent.PagesCount).Append(";")
                             .Append(patent.PublicationDate.ToString("yyyy-MM-dd")).Append(";");
 
-                        for (var i = 0; i < patent.Inventors.Count; i++)
+                        foreach (var inventor in patent.Inventors)
                         {
-                            sb.Append(patent.Inventors[i].FirstName).Append(",");
-                            sb.Append(patent.Inventors[i].LastName).Append(";");
+                            sb.Append(inventor.FirstName).Append(",");
+                            sb.Append(inventor.LastName).Append(";");
                         }
 
                         sb.Append(sb.ToString().GetHashCode());
@@ -149,6 +149,104 @@ namespace Library
                     }
                 }
             }
+        }
+
+        public static void Load(string filePath, bool ignoreErrors)
+        {
+            var lines = File.ReadLines(filePath).ToList();
+
+            if (!ignoreErrors && !CheckIncomingData(lines))
+            {
+                throw new IOException("Data file contain incorrect data");
+            }
+
+            foreach (var line in lines.Select(line => line.Split(';')))
+            {
+                if (!CheckLine(string.Join(";", line)))
+                {
+                    continue;
+                }
+
+                switch (line[0])
+                {
+                    case "Book":
+                        LoadBook(line);
+                        break;
+                    case "Newspaper":
+                        LoadNewspaper(line);
+                        break;
+                    case "Patent":
+                        LoadPatent(line);
+                        break;
+                }
+            }
+        }
+
+        private static bool CheckLine(string line)
+        {
+            int hashCode;
+            if (!int.TryParse(line.Split(';').Last(), out hashCode))
+            {
+                return false;
+            }
+
+            var valuePart = line.Substring(0, line.Length - hashCode.ToString().Length);
+
+            return valuePart.GetHashCode() == hashCode;
+        }
+
+        private static bool CheckIncomingData(IList<string> lines)
+        {
+            return !lines.Any(l => l.Split(';').Length < 10) && lines.All(CheckLine);
+        }
+
+        private static void LoadBook(string[] line)
+        {
+            var authors = new List<Person>();
+            for (var i = 8; i < line.Length - 1; i++)
+            {
+                var firstName = line[i].Split(',')[0];
+                var lastName = line[i].Split(',')[1];
+                authors.Add(new Person(firstName, lastName));
+            }
+
+            var book = new Book(line[3], int.Parse(line[4]), line[5], line[7],
+                line[1], authors, DateTime.Parse(line[6]))
+            {
+                Annotation = line[2] == "null" ? null : line[2]
+            };
+
+            Add(book);
+        }
+
+        private static void LoadNewspaper(string[] line)
+        {
+            var newspaper = new Newspaper(line[3], int.Parse(line[5]), line[6],
+                            line[8], line[1], int.Parse(line[2]), DateTime.Parse(line[7]))
+            {
+                Annotation = line[4] == "null" ? null : line[4]
+            };
+
+            Add(newspaper);
+        }
+
+        private static void LoadPatent(string[] line)
+        {
+            var inventors = new List<Person>();
+            for (var i = 8; i < line.Length - 1; i++)
+            {
+                var firstName = line[i].Split(',')[0];
+                var lastName = line[i].Split(',')[1];
+                inventors.Add(new Person(firstName, lastName));
+            }
+
+            var patent = new Patent(line[4], int.Parse(line[6]), line[3],
+                DateTime.Parse(line[1]), line[2], inventors, DateTime.Parse(line[7]))
+            {
+                Annotation = line[5] == "null" ? null : line[4]
+            };
+
+            Add(patent);
         }
     }
 }

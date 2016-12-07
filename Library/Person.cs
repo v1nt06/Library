@@ -27,5 +27,26 @@ namespace Library
         {
             return FirstName.Substring(0, 1).ToUpper() + ". " + LastName;
         }
+
+        public override bool Equals(object obj)
+        {
+            if (obj == null)
+            {
+                return false;
+            }
+
+            if (ReferenceEquals(obj, this))
+            {
+                return true;
+            }
+
+            if (GetType() != obj.GetType())
+            {
+                return false;
+            }
+
+            var person = (Person)obj;
+            return FirstName == person.FirstName && LastName == person.LastName;
+        }
     }
 }

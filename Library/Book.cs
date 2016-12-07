@@ -41,5 +41,24 @@ namespace Library
             }
             return name;
         }
+
+        public override bool Equals(object obj)
+        {
+            var book = obj as Book;
+
+            if (Authors.Count != book?.Authors.Count)
+            {
+                return false;
+            }
+
+            var areEqual = base.Equals(obj) && ISBN == book.ISBN;
+
+            for (var i = 0; i < Authors.Count; i++)
+            {
+                areEqual = areEqual && Authors[i].Equals(book.Authors[i]);
+            }
+
+            return areEqual;
+        }
     }
 }
