@@ -84,68 +84,15 @@ namespace Library
                 {
                     if (document is Book)
                     {
-                        var sb = new StringBuilder();
-                        var book = (Book)document;
-                        sb.Append("Book;")
-                            .Append(book.ISBN).Append(";")
-                            .Append(book.Annotation ?? "null").Append(";")
-                            .Append(book.Name).Append(";")
-                            .Append(book.PagesCount).Append(";")
-                            .Append(book.PlaceOfPublication).Append(";")
-                            .Append(book.PublicationDate.ToString("yyyy-MM-dd")).Append(";")
-                            .Append(book.Publisher).Append(";");
-
-                        foreach (var author in book.Authors)
-                        {
-                            sb.Append(author.FirstName).Append(",");
-                            sb.Append(author.LastName).Append(";");
-                        }
-
-                        sb.Append(sb.ToString().GetHashCode());
-
-                        sw.WriteLine(sb);
-
+                        SaveBook((Book)document, sw);
                     }
                     else if (document is Newspaper)
                     {
-                        var sb = new StringBuilder();
-                        var newspaper = (Newspaper)document;
-                        sb.Append("Newspaper").Append(";")
-                            .Append(newspaper.ISSN).Append(";")
-                            .Append(newspaper.Number).Append(";")
-                            .Append(newspaper.Name).Append(";")
-                            .Append(newspaper.Annotation ?? "null").Append(";")
-                            .Append(newspaper.PagesCount).Append(";")
-                            .Append(newspaper.PlaceOfPublication).Append(";")
-                            .Append(newspaper.PublicationDate.ToString("yyyy-MM-dd")).Append(";")
-                            .Append(newspaper.Publisher).Append(";");
-
-                        sb.Append(sb.ToString().GetHashCode());
-
-                        sw.WriteLine(sb);
+                        SaveNewspaper((Newspaper)document, sw);
                     }
                     else
                     {
-                        var sb = new StringBuilder();
-                        var patent = (Patent)document;
-                        sb.Append("Patent").Append(";")
-                            .Append(patent.ApplicationDate.ToString("yyyy-MM-dd")).Append(";")
-                            .Append(patent.Country).Append(";")
-                            .Append(patent.RegistrationNumber).Append(";")
-                            .Append(patent.Name).Append(";")
-                            .Append(patent.Annotation ?? "null").Append(";")
-                            .Append(patent.PagesCount).Append(";")
-                            .Append(patent.PublicationDate.ToString("yyyy-MM-dd")).Append(";");
-
-                        foreach (var inventor in patent.Inventors)
-                        {
-                            sb.Append(inventor.FirstName).Append(",");
-                            sb.Append(inventor.LastName).Append(";");
-                        }
-
-                        sb.Append(sb.ToString().GetHashCode());
-
-                        sw.WriteLine(sb);
+                        SavePatent((Patent)document, sw);
                     }
                 }
             }
@@ -180,6 +127,82 @@ namespace Library
                         break;
                 }
             }
+        }
+
+        public static IEnumerable<Document> Get(Func<Document, bool> searchCriteria,
+            Func<Document, object> orderCriteria, bool ascending)
+        {
+            if (ascending)
+            {
+                return GetCatalogContent().Where(searchCriteria).OrderBy(orderCriteria);
+            }
+
+            return GetCatalogContent().Where(searchCriteria).OrderByDescending(orderCriteria);
+        }
+
+        private static void SaveBook(Book book, TextWriter sw)
+        {
+            var sb = new StringBuilder();
+            sb.Append("Book;")
+                .Append(book.ISBN).Append(";")
+                .Append(book.Annotation ?? "null").Append(";")
+                .Append(book.Name).Append(";")
+                .Append(book.PagesCount).Append(";")
+                .Append(book.PlaceOfPublication).Append(";")
+                .Append(book.PublicationDate.ToString("yyyy-MM-dd")).Append(";")
+                .Append(book.Publisher).Append(";");
+
+            foreach (var author in book.Authors)
+            {
+                sb.Append(author.FirstName).Append(",");
+                sb.Append(author.LastName).Append(";");
+            }
+
+            sb.Append(sb.ToString().GetHashCode());
+
+            sw.WriteLine(sb);
+        }
+
+        private static void SaveNewspaper(Newspaper newspaper, TextWriter sw)
+        {
+            var sb = new StringBuilder();
+            sb.Append("Newspaper").Append(";")
+                .Append(newspaper.ISSN).Append(";")
+                .Append(newspaper.Number).Append(";")
+                .Append(newspaper.Name).Append(";")
+                .Append(newspaper.Annotation ?? "null").Append(";")
+                .Append(newspaper.PagesCount).Append(";")
+                .Append(newspaper.PlaceOfPublication).Append(";")
+                .Append(newspaper.PublicationDate.ToString("yyyy-MM-dd")).Append(";")
+                .Append(newspaper.Publisher).Append(";");
+
+            sb.Append(sb.ToString().GetHashCode());
+
+            sw.WriteLine(sb);
+        }
+
+        private static void SavePatent(Patent patent, TextWriter sw)
+        {
+            if (sw == null) throw new ArgumentNullException(nameof(sw));
+            var sb = new StringBuilder();
+            sb.Append("Patent").Append(";")
+                .Append(patent.ApplicationDate.ToString("yyyy-MM-dd")).Append(";")
+                .Append(patent.Country).Append(";")
+                .Append(patent.RegistrationNumber).Append(";")
+                .Append(patent.Name).Append(";")
+                .Append(patent.Annotation ?? "null").Append(";")
+                .Append(patent.PagesCount).Append(";")
+                .Append(patent.PublicationDate.ToString("yyyy-MM-dd")).Append(";");
+
+            foreach (var inventor in patent.Inventors)
+            {
+                sb.Append(inventor.FirstName).Append(",");
+                sb.Append(inventor.LastName).Append(";");
+            }
+
+            sb.Append(sb.ToString().GetHashCode());
+
+            sw.WriteLine(sb);
         }
 
         private static bool CheckLine(string line)

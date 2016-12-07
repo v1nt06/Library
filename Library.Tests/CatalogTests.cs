@@ -159,7 +159,7 @@ namespace Library.Tests
             var newspaper = new Newspaper("Коммерсант", 30, "Москва", "Издательство", "ISSN-1", 1, new DateTime(2016, 12, 1));
             var patent = new Patent("Телефон", 50, "T-1", new DateTime(2016, 12, 1), "Россия",
                 new List<Person> { new Person("Ivan", "Ivanov") }, new DateTime(2016, 12, 1));
-            var correctData = new List<Document> {book, newspaper, patent};
+            var correctData = new List<Document> { book, newspaper, patent };
 
             Catalog.Load("expectedFile", false);
 
@@ -188,6 +188,22 @@ namespace Library.Tests
         public void TryLoadIncorrectData()
         {
             Catalog.Load("incorrectFile", false);
+        }
+
+        [TestMethod]
+        public void GetContentByCriteria()
+        {
+            var book = CreateTestBook();
+            var newspaper = new Newspaper("Коммерсант", 30, "Архангельск", "Издательство", "ISSN-1", 1, new DateTime(2016, 12, 1));
+            var patent = new Patent("Телефон", 50, "T-1", new DateTime(2016, 12, 1), "Россия",
+                new List<Person> { new Person("Ivan", "Ivanov") }, new DateTime(2016, 12, 1));
+            var correctData = new List<Document> { newspaper, book };
+            Catalog.Add(book);
+            Catalog.Add(newspaper);
+            Catalog.Add(patent);
+
+            CollectionAssert.AreEqual(correctData, Catalog.Get(d => d is PrintedProduct,
+                d => d.PagesCount, true).ToList());
         }
 
         private Book CreateTestBook()
