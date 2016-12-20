@@ -10,7 +10,7 @@ namespace Library.Tests
         private const int PagesCount = 50;
         private const string PlaceOfPublication = "Москва";
         private const string Publisher = "Издательство";
-        private const string ISSN = "ISSN 2049-3630";
+        private const string ISSN = "ISSN 0378-5955";
         private const int Number = 12;
         private readonly DateTime publicationDate = new DateTime(2016, 11, 23);
 
@@ -76,6 +76,13 @@ namespace Library.Tests
         public void CreateNewspaperWithNonPositiveNumber()
         {
             new Newspaper(Name, PagesCount, PlaceOfPublication, Publisher, ISSN, 0, publicationDate);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof (ArgumentException))]
+        public void CreateNewspaperWithIncorrectISSN()
+        {
+            new Newspaper(Name, PagesCount, PlaceOfPublication, Publisher, "ISSN 0378-5950", 1, publicationDate);
         }
     }
 }

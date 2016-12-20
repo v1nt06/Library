@@ -9,7 +9,7 @@ namespace Library.Tests
     {
         private const string Name = "Телефон";
         private const int PagesCount = 1274;
-        private const string RegistrationNumber = "Т-1";
+        private const string RegistrationNumber = "123456";
         private readonly DateTime applicationDate = new DateTime(1950, 1, 1);
         private const string Country = "Франция";
         private readonly IList<Person> inventors = new List<Person> { new Person("Alexander", "Bell") };
@@ -40,7 +40,7 @@ namespace Library.Tests
         {
             var patent = new Patent(Name, PagesCount, RegistrationNumber, applicationDate, Country, inventors, publicationDate);
 
-            Assert.AreEqual("Телефон №Т-1", patent.ToString());
+            Assert.AreEqual("Телефон №123456", patent.ToString());
         }
 
         [TestMethod]
@@ -97,6 +97,28 @@ namespace Library.Tests
         public void CreatePatentWithPublicationDateBelow1950()
         {
             new Patent(Name, PagesCount, RegistrationNumber, applicationDate, Country, inventors, new DateTime(1949, 12, 31));
+        }
+
+        [TestMethod]
+        public void CreatePatentsWithCorrectRegNumber()
+        {
+            new Patent(Name, PagesCount, "123456", applicationDate, Country, inventors, publicationDate);
+            new Patent(Name, PagesCount, "1234567", applicationDate, Country, inventors, publicationDate);
+            new Patent(Name, PagesCount, "RE123456", applicationDate, Country, inventors, publicationDate);
+            new Patent(Name, PagesCount, "PP123456", applicationDate, Country, inventors, publicationDate);
+            new Patent(Name, PagesCount, "AI123456", applicationDate, Country, inventors, publicationDate);
+            new Patent(Name, PagesCount, "D1234567", applicationDate, Country, inventors, publicationDate);
+            new Patent(Name, PagesCount, "X1234567", applicationDate, Country, inventors, publicationDate);
+            new Patent(Name, PagesCount, "H1234567", applicationDate, Country, inventors, publicationDate);
+            new Patent(Name, PagesCount, "T1234567", applicationDate, Country, inventors, publicationDate);
+            new Patent(Name, PagesCount, "1 - 2016/1", applicationDate, Country, inventors, publicationDate);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentException))]
+        public void CreatePatentWithIncorrectRegNumber()
+        {
+            new Patent(Name, PagesCount, "12345", applicationDate, Country, inventors, publicationDate);
         }
     }
 }

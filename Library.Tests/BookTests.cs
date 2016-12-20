@@ -116,5 +116,12 @@ namespace Library.Tests
 
             Assert.AreEqual(newAnnotation, book.Annotation);
         }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentException))]
+        public void CreateBookWithIncorrectISBN()
+        {
+            new Book(Name, PagesCount, PlaceOfPublication, Publisher, "ISBN 978-3-16-148410-1", authors, publicationDate);
+        }
     }
 }

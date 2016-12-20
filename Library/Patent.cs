@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 
 namespace Library
 {
@@ -40,10 +41,25 @@ namespace Library
                 throw new ArgumentOutOfRangeException("publicationDate", "Publication date should be greater than 1949");
             }
 
+            if (!IsRegNumberCorrect(registrationNumber))
+            {
+                throw new ArgumentException("Invalid registration number", "registrationNumber");
+            }
+
             Inventors = inventors;
             Country = country;
             RegistrationNumber = registrationNumber;
             ApplicationDate = applicationDate;
+        }
+
+        private bool IsRegNumberCorrect(string registrationNumber)
+        {
+            return Regex.IsMatch(registrationNumber, @"^\d{6,7}$")
+                   || Regex.IsMatch(registrationNumber, @"^RE\d{6}$")
+                   || Regex.IsMatch(registrationNumber, @"^PP\d{6}$")
+                   || Regex.IsMatch(registrationNumber, @"^AI\d{6}$")
+                   || Regex.IsMatch(registrationNumber, @"^[DXHT]\d{7}$")
+                   || Regex.IsMatch(registrationNumber, @"^\d+ - \d{4}/\d+$");
         }
 
         public override string ToString()

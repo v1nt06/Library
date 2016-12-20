@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 
 namespace Library
 {
@@ -28,8 +29,48 @@ namespace Library
                 throw new ArgumentException("Author shouldn't be null", "author");
             }
 
+            if (!IsISBNCorrect(isbn))
+            {
+                throw new ArgumentException("Invalid ISBN", "isbn");
+            }
+
             Authors = authors;
             ISBN = isbn;
+        }
+
+        private bool IsISBNCorrect(string isbn)
+        {
+            var isbnDigitString = Regex.Replace(isbn, @"[^\d]", string.Empty);
+            
+            return Regex.IsMatch(isbn, @"^ISBN 978-\d{1,5}-\d{1,7}-\d{1,7}-\d$")
+                && isbnDigitString.Length == 13
+                && isCheckSumCorrect(isbnDigitString);
+        }
+
+        protected bool isCheckSumCorrect(string isbnDigitString)
+        {
+            var digits = new int[13];
+            for (var i = 0; i < digits.Length; i++)
+            {
+                digits[i] = isbnDigitString[i] - 0x30;
+            }
+
+            var evensSum = 0;
+            for (var i = 1; i < digits.Length; i += 2)
+            {
+                evensSum += digits[i];
+            }
+            evensSum *= 3;
+
+            var oddsSum = 0;
+            for (var i = 0; i < digits.Length; i += 2)
+            {
+                evensSum += digits[i];
+            }
+
+            var mod = (evensSum + oddsSum) % 10;
+
+            return digits[12] == (10 - mod != 10 ? 10 - mod : 0);
         }
 
         public override string ToString()

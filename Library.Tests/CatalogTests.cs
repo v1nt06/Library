@@ -13,8 +13,8 @@ namespace Library.Tests
         public void AddToCatalog()
         {
             var book = CreateTestBook();
-            var newspaper = new Newspaper("Коммерсант", 30, "Москва", "Издательство", "ISSN-1", 1, DateTime.Today);
-            var patent = new Patent("Телефон", 50, "T-1", DateTime.Today, "Россия",
+            var newspaper = new Newspaper("Коммерсант", 30, "Москва", "Издательство", "ISSN 0378-5955", 1, DateTime.Today);
+            var patent = new Patent("Телефон", 50, "123456", DateTime.Today, "Россия",
                 new List<Person> { new Person("Ivan", "ivanov") }, DateTime.Today);
 
             var documents = new List<Document> { book, newspaper, patent };
@@ -92,11 +92,11 @@ namespace Library.Tests
         [TestMethod]
         public void FindBooksByAuthor()
         {
-            var bookLev = new Book("Война и мир", 500, "Москва", "Издательство", "ISBN-1",
+            var bookLev = new Book("Война и мир", 500, "Москва", "Издательство", "ISBN 978-3-16-148410-0",
                 new List<Person> { new Person("Лев", "Толстой"), }, DateTime.Today);
-            var bookChakLev = new Book("Бойцовский клуб", 500, "Москва", "Другое издательство", "ISBN-2",
+            var bookChakLev = new Book("Бойцовский клуб", 500, "Москва", "Другое издательство", "ISBN 978-3-16-148410-0",
                 new List<Person> { new Person("Чак", "Паланик"), new Person("Лев", "Толстой"), }, DateTime.Today.AddDays(-1));
-            var bookAnjey = new Book("Ведьмак", 500, "Москва", "Издательство", "ISSN-3",
+            var bookAnjey = new Book("Ведьмак", 500, "Москва", "Издательство", "ISBN 978-3-16-148410-0",
                 new List<Person> { new Person("Анджей", "Сапковский") }, DateTime.Today.AddYears(1));
             var documents = new List<Document> { bookLev, bookChakLev };
 
@@ -112,13 +112,13 @@ namespace Library.Tests
         [TestMethod]
         public void GetBooksGroupedByPublisherWithPublisherNamePart()
         {
-            var bookPublisherAnother1 = new Book("Война и мир", 500, "Москва", "Издательство другое", "ISBN-1",
+            var bookPublisherAnother1 = new Book("Война и мир", 500, "Москва", "Издательство другое", "ISBN 978-3-16-148410-0",
                 new List<Person> { new Person("Лев", "Толстой"), }, DateTime.Today);
-            var bookAnotherPublisher = new Book("Бойцовский клуб", 500, "Москва", "Другое издательство", "ISBN-2",
+            var bookAnotherPublisher = new Book("Бойцовский клуб", 500, "Москва", "Другое издательство", "ISBN 978-3-16-148410-0",
                 new List<Person> { new Person("Чак", "Паланик"), new Person("Лев", "Толстой"), }, DateTime.Today.AddDays(-1));
-            var bookPublisher = new Book("Ведьмак", 500, "Москва", "Издательство", "ISSN-3",
+            var bookPublisher = new Book("Ведьмак", 500, "Москва", "Издательство", "ISBN 978-3-16-148410-0",
                 new List<Person> { new Person("Анджей", "Сапковский") }, DateTime.Today.AddYears(1));
-            var bookPublisherAnother2 = new Book("Хлеб с ветчиной", 500, "Москва", "Издательство другое", "ISSN-3",
+            var bookPublisherAnother2 = new Book("Хлеб с ветчиной", 500, "Москва", "Издательство другое", "ISBN 978-3-16-148410-0",
                 new List<Person> { new Person("Анджей", "Сапковский") }, DateTime.Today.AddYears(1));
             var documents = new List<Document> { bookPublisher, bookPublisherAnother1, bookPublisherAnother2 };
 
@@ -136,8 +136,8 @@ namespace Library.Tests
         public void SaveCatalogContent()
         {
             var book = CreateTestBook();
-            var newspaper = new Newspaper("Коммерсант", 30, "Москва", "Издательство", "ISSN-1", 1, new DateTime(2016, 12, 1));
-            var patent = new Patent("Телефон", 50, "T-1", new DateTime(2016, 12, 1), "Россия",
+            var newspaper = new Newspaper("Коммерсант", 30, "Москва", "Издательство", "ISSN 0378-5955", 1, new DateTime(2016, 12, 1));
+            var patent = new Patent("Телефон", 50, "123456", new DateTime(2016, 12, 1), "Россия",
                 new List<Person> { new Person("Ivan", "Ivanov") }, new DateTime(2016, 12, 1));
             Catalog.Add(book);
             Catalog.Add(newspaper);
@@ -156,8 +156,8 @@ namespace Library.Tests
         public void LoadCorrectDataToCatalog()
         {
             var book = CreateTestBook();
-            var newspaper = new Newspaper("Коммерсант", 30, "Москва", "Издательство", "ISSN-1", 1, new DateTime(2016, 12, 1));
-            var patent = new Patent("Телефон", 50, "T-1", new DateTime(2016, 12, 1), "Россия",
+            var newspaper = new Newspaper("Коммерсант", 30, "Москва", "Издательство", "ISSN 0378-5955", 1, new DateTime(2016, 12, 1));
+            var patent = new Patent("Телефон", 50, "123456", new DateTime(2016, 12, 1), "Россия",
                 new List<Person> { new Person("Ivan", "Ivanov") }, new DateTime(2016, 12, 1));
             var correctData = new List<Document> { book, newspaper, patent };
 
@@ -171,8 +171,8 @@ namespace Library.Tests
         [TestMethod]
         public void LoadIncorrectDataToCatalogWithIgnoringErrors()
         {
-            var newspaper = new Newspaper("Коммерсант", 30, "Москва", "Издательство", "ISSN-1", 1, new DateTime(2016, 12, 1));
-            var patent = new Patent("Телефон", 50, "T-1", new DateTime(2016, 12, 1), "Россия",
+            var newspaper = new Newspaper("Коммерсант", 30, "Москва", "Издательство", "ISSN 0378-5955", 1, new DateTime(2016, 12, 1));
+            var patent = new Patent("Телефон", 50, "123456", new DateTime(2016, 12, 1), "Россия",
                 new List<Person> { new Person("Ivan", "Ivanov") }, new DateTime(2016, 12, 1));
             var correctData = new List<Document> { newspaper, patent };
 
@@ -188,14 +188,16 @@ namespace Library.Tests
         public void TryLoadIncorrectData()
         {
             Catalog.Load("incorrectFile", false);
+
+            ResetCatalog();
         }
 
         [TestMethod]
         public void GetContentByCriteria()
         {
             var book = CreateTestBook();
-            var newspaper = new Newspaper("Коммерсант", 30, "Архангельск", "Издательство", "ISSN-1", 1, new DateTime(2016, 12, 1));
-            var patent = new Patent("Телефон", 50, "T-1", new DateTime(2016, 12, 1), "Россия",
+            var newspaper = new Newspaper("Коммерсант", 30, "Архангельск", "Издательство", "ISSN 0378-5955", 1, new DateTime(2016, 12, 1));
+            var patent = new Patent("Телефон", 50, "123456", new DateTime(2016, 12, 1), "Россия",
                 new List<Person> { new Person("Ivan", "Ivanov") }, new DateTime(2016, 12, 1));
             var correctData = new List<Document> { newspaper, book };
             Catalog.Add(book);
@@ -204,6 +206,8 @@ namespace Library.Tests
 
             CollectionAssert.AreEqual(correctData, Catalog.Get(d => d is PrintedProduct,
                 d => d.PagesCount, true).ToList());
+
+            ResetCatalog();
         }
 
         private Book CreateTestBook()
