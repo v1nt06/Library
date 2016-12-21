@@ -7,14 +7,16 @@ namespace Library
 {
     public sealed class Book : PrintedProduct
     {
-        public IList<Person> Authors { get; }
-        public string ISBN { get; }
+        public List<Person> Authors { get; set; }
+        public string ISBN { get; set; }
+
+        private Book() : base() { }
 
         public Book(string name, int pagesCount, string placeOfPublication, string publisher,
-            string isbn, IList<Person> authors, DateTime publicationDate) :
+            string isbn, IEnumerable<Person> authors, DateTime publicationDate) :
             base(name, pagesCount, placeOfPublication, publisher, publicationDate)
         {
-            if (authors == null || authors.Count == 0)
+            if (authors == null || authors.Count() == 0)
             {
                 throw new ArgumentException("Authors should contains at least one person", "authors");
             }
@@ -34,7 +36,7 @@ namespace Library
                 throw new ArgumentException("Invalid ISBN", "isbn");
             }
 
-            Authors = authors;
+            Authors = authors.ToList();
             ISBN = isbn;
         }
 
@@ -47,7 +49,7 @@ namespace Library
                 && isCheckSumCorrect(isbnDigitString);
         }
 
-        protected bool isCheckSumCorrect(string isbnDigitString)
+        private bool isCheckSumCorrect(string isbnDigitString)
         {
             var digits = new int[13];
             for (var i = 0; i < digits.Length; i++)
@@ -85,21 +87,21 @@ namespace Library
 
         public override bool Equals(object obj)
         {
+            var areEquals = base.Equals(obj);
+
             var book = obj as Book;
+            areEquals = areEquals && ISBN == book.ISBN;
 
             if (Authors.Count != book?.Authors.Count)
             {
                 return false;
             }
-
-            var areEqual = base.Equals(obj) && ISBN == book.ISBN;
-
             for (var i = 0; i < Authors.Count; i++)
             {
-                areEqual = areEqual && Authors[i].Equals(book.Authors[i]);
+                areEquals = areEquals && Authors[i].Equals(book.Authors[i]);
             }
 
-            return areEqual;
+            return areEquals;
         }
     }
 }

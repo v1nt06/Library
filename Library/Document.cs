@@ -1,13 +1,18 @@
 ﻿using System;
+using System.Xml.Serialization;
 
 namespace Library
 {
+    [XmlInclude(typeof(PrintedProduct))]
+    [XmlInclude(typeof(Patent))]
     public abstract class Document
     {
-        public string Name { get; }
-        public int PagesCount { get; }
+        public string Name { get; set; }
+        public int PagesCount { get; set; }
         public string Annotation { get; set; }
-        public DateTime PublicationDate { get; }
+        public DateTime PublicationDate { get; set; }
+
+        protected Document() { }
 
         protected Document(string name, int pagesCount, DateTime publicationDate)
         {

@@ -5,8 +5,10 @@ namespace Library
 {
     public sealed class Newspaper : PrintedProduct
     {
-        public int Number { get; }
-        public string ISSN { get; }
+        public int Number { get; set; }
+        public string ISSN { get; set; }
+
+        private Newspaper() : base() { }
 
         public Newspaper(string name, int pagesCount, string placeOfPublication, string publisher,
             string issn, int number, DateTime pulicationDate) :
@@ -59,13 +61,14 @@ namespace Library
 
         public override bool Equals(object obj)
         {
+            var areEquals = base.Equals(obj);
             var newspaper = obj as Newspaper;
             if (newspaper == null)
             {
                 return false;
             }
 
-            return base.Equals(obj) && Number == newspaper.Number && ISSN == newspaper.ISSN;
+            return areEquals && Number == newspaper.Number && ISSN == newspaper.ISSN;
         }
     }
 }

@@ -1,11 +1,16 @@
 ﻿using System;
+using System.Xml.Serialization;
 
 namespace Library
 {
+    [XmlInclude(typeof(Book))]
+    [XmlInclude(typeof(Newspaper))]
     public abstract class PrintedProduct : Document
     {
-        public string PlaceOfPublication { get; }
-        public string Publisher { get; }
+        public string PlaceOfPublication { get; set; }
+        public string Publisher { get; set; }
+
+        protected PrintedProduct() : base() { }
 
         protected PrintedProduct(string name, int pagesCount, string placeOfPublication,
             string publisher, DateTime publicationDate) :
@@ -27,13 +32,14 @@ namespace Library
 
         public override bool Equals(object obj)
         {
+            var areEquals = base.Equals(obj);
             var printedProduct = obj as PrintedProduct;
             if (printedProduct == null)
             {
                 return false;
             }
 
-            return base.Equals(obj) && PlaceOfPublication == printedProduct.PlaceOfPublication
+            return areEquals && PlaceOfPublication == printedProduct.PlaceOfPublication
                 && Publisher == printedProduct.Publisher;
         }
     }

@@ -7,16 +7,18 @@ namespace Library
 {
     public sealed class Patent : Document
     {
-        public IList<Person> Inventors { get; }
-        public string Country { get; }
-        public string RegistrationNumber { get; }
-        public DateTime ApplicationDate { get; }
+        public List<Person> Inventors { get; set; }
+        public string Country { get; set; }
+        public string RegistrationNumber { get; set; }
+        public DateTime ApplicationDate { get; set; }
+
+        private Patent() : base() { }
 
         public Patent(string name, int pagesCount, string registrationNumber,
-            DateTime applicationDate, string country, IList<Person> inventors, DateTime publicationDate) : 
+            DateTime applicationDate, string country, IEnumerable<Person> inventors, DateTime publicationDate) : 
             base(name, pagesCount, publicationDate)
         {
-            if (inventors == null || inventors.Count == 0)
+            if (inventors == null || inventors.Count() == 0)
             {
                 throw new ArgumentException("Inventors should contains at least one person", "inventors");
             }
@@ -46,7 +48,7 @@ namespace Library
                 throw new ArgumentException("Invalid registration number", "registrationNumber");
             }
 
-            Inventors = inventors;
+            Inventors = inventors.ToList();
             Country = country;
             RegistrationNumber = registrationNumber;
             ApplicationDate = applicationDate;
@@ -69,22 +71,23 @@ namespace Library
 
         public override bool Equals(object obj)
         {
+            var areEquals = base.Equals(obj);
+
             var patent = obj as Patent;
+            areEquals = areEquals && Country == patent.Country
+                && RegistrationNumber == patent.RegistrationNumber
+                && ApplicationDate == patent.ApplicationDate;
 
             if (Inventors.Count != patent?.Inventors.Count)
             {
                 return false;
             }
-
-            var areEqual = base.Equals(obj) && Country == patent.Country
-                && RegistrationNumber == patent.RegistrationNumber && ApplicationDate == patent.ApplicationDate;
-
             for (var i = 0; i < Inventors.Count; i++)
             {
-                areEqual = areEqual && Inventors[i].Equals(patent.Inventors[i]);
+                areEquals = areEquals && Inventors[i].Equals(patent.Inventors[i]);
             }
 
-            return areEqual;
+            return areEquals;
         }
     }
 }

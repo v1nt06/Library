@@ -4,8 +4,10 @@ namespace Library
 {
     public sealed class Person
     {
-        public string FirstName { get; }
-        public string LastName { get; }
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
+
+        private Person() { }
 
         public Person(string firstName, string lastName)
         {
