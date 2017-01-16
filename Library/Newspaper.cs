@@ -5,8 +5,25 @@ namespace Library
 {
     public sealed class Newspaper : PrintedProduct
     {
+        private string issn;
+
         public int Number { get; set; }
-        public string ISSN { get; set; }
+
+        public string ISSN
+        {
+            get { return issn; }
+            set
+            {
+                if (IsISSNCorrect(value))
+                {
+                    issn = value;
+                }
+                else
+                {
+                    throw new ArgumentException("Invalid ISSN", "issn");
+                }
+            }
+        }
 
         private Newspaper() { }
 

@@ -7,10 +7,27 @@ namespace Library
 {
     public sealed class Patent : Document
     {
+        private string registrationNumber;
+
         public List<Person> Inventors { get; set; }
         public string Country { get; set; }
-        public string RegistrationNumber { get; set; }
         public DateTime ApplicationDate { get; set; }
+
+        public string RegistrationNumber
+        {
+            get { return registrationNumber; }
+            set
+            {
+                if (IsRegNumberCorrect(value))
+                {
+                    registrationNumber = value;
+                }
+                else
+                {
+                    throw new ArgumentException("Invalid registration number", "registrationNumber");
+                }
+            }
+        }
 
         private Patent() { }
 
