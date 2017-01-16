@@ -10,7 +10,7 @@ namespace Library
         public string PlaceOfPublication { get; set; }
         public string Publisher { get; set; }
 
-        protected PrintedProduct() : base() { }
+        protected PrintedProduct() { }
 
         protected PrintedProduct(string name, int pagesCount, string placeOfPublication,
             string publisher, DateTime publicationDate) :

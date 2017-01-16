@@ -84,5 +84,20 @@ namespace Library.Tests
         {
             new Newspaper(Name, PagesCount, PlaceOfPublication, Publisher, "ISSN 0378-5950", 1, publicationDate);
         }
+
+        [TestMethod]
+        public void ChangeNewspaperProperties()
+        {
+            var newspaper = new Newspaper(Name, PagesCount, PlaceOfPublication, Publisher, ISSN, Number, publicationDate);
+
+            var newNumber = 1;
+            var newISSN = "ISSN 1663-7658";
+
+            newspaper.Number = newNumber;
+            newspaper.ISSN = newISSN;
+
+            Assert.AreEqual(newNumber, newspaper.Number);
+            Assert.AreEqual(newISSN, newspaper.ISSN);
+        }
     }
 }

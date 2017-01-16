@@ -120,5 +120,26 @@ namespace Library.Tests
         {
             new Patent(Name, PagesCount, "12345", applicationDate, Country, inventors, publicationDate);
         }
+
+        [TestMethod]
+        public void ChangePatentProperties()
+        {
+            var patent = new Patent(Name, PagesCount, RegistrationNumber, applicationDate, Country, inventors, publicationDate);
+
+            var newInventors = new List<Person> {new Person("Александр", "Попов")};
+            var newCountry = "Россия";
+            var newRegistrtionNumber = "654321";
+            var newApplicationDate = DateTime.Today;
+
+            patent.Inventors = newInventors;
+            patent.Country = newCountry;
+            patent.RegistrationNumber = newRegistrtionNumber;
+            patent.ApplicationDate = newApplicationDate;
+
+            CollectionAssert.AreEqual(newInventors, patent.Inventors);
+            Assert.AreEqual(newCountry, patent.Country);
+            Assert.AreEqual(newRegistrtionNumber, patent.RegistrationNumber);
+            Assert.AreEqual(newApplicationDate, patent.ApplicationDate);
+        }
     }
 }

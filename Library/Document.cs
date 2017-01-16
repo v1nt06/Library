@@ -31,11 +31,6 @@ namespace Library
             return Name;
         }
 
-        public void ChangeAnnotation(string newAnnotation)
-        {
-            Annotation = newAnnotation;
-        }
-
         public override bool Equals(object obj)
         {
             if (obj == null)

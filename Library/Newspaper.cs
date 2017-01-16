@@ -8,7 +8,7 @@ namespace Library
         public int Number { get; set; }
         public string ISSN { get; set; }
 
-        private Newspaper() : base() { }
+        private Newspaper() { }
 
         public Newspaper(string name, int pagesCount, string placeOfPublication, string publisher,
             string issn, int number, DateTime pulicationDate) :
@@ -45,7 +45,7 @@ namespace Library
                 digits[i] = issnDigitString[i] - 0x30;
             }
 
-            var mod = (digits[0]*8 + digits[1]*7 + digits[2]*6 + digits[3]*5 + digits[4]*4 + digits[5]*3 + digits[6]*2)%11;
+            var mod = (digits[0] * 8 + digits[1] * 7 + digits[2] * 6 + digits[3] * 5 + digits[4] * 4 + digits[5] * 3 + digits[6] * 2) % 11;
             if (mod == 0)
             {
                 return digits[7] == mod;

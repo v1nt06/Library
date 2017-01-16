@@ -7,10 +7,27 @@ namespace Library
 {
     public sealed class Book : PrintedProduct
     {
-        public List<Person> Authors { get; set; }
-        public string ISBN { get; set; }
+        private string isbn;
 
-        private Book() : base() { }
+        public List<Person> Authors { get; set; }
+
+        public string ISBN
+        {
+            get { return isbn; }
+            set
+            {
+                if (IsISBNCorrect(value))
+                {
+                    isbn = value;
+                }
+                else
+                {
+                    throw new ArgumentException("Invalid ISBN", "isbn");
+                }
+            }
+        }
+
+        private Book() { }
 
         public Book(string name, int pagesCount, string placeOfPublication, string publisher,
             string isbn, IEnumerable<Person> authors, DateTime publicationDate) :
@@ -43,7 +60,7 @@ namespace Library
         private bool IsISBNCorrect(string isbn)
         {
             var isbnDigitString = Regex.Replace(isbn, @"[^\d]", string.Empty);
-            
+
             return Regex.IsMatch(isbn, @"^ISBN 978-\d{1,5}-\d{1,7}-\d{1,7}-\d$")
                 && isbnDigitString.Length == 13
                 && isCheckSumCorrect(isbnDigitString);
@@ -65,9 +82,9 @@ namespace Library
             evensSum *= 3;
 
             var oddsSum = 0;
-            for (var i = 0; i < digits.Length; i += 2)
+            for (var i = 0; i < digits.Length - 1; i += 2)
             {
-                evensSum += digits[i];
+                oddsSum += digits[i];
             }
 
             var mod = (evensSum + oddsSum) % 10;

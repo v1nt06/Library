@@ -107,14 +107,36 @@ namespace Library.Tests
         }
 
         [TestMethod]
-        public void ChangeBookAnnotation()
+        public void ChangeBookProperties()
         {
             var book = new Book(Name, PagesCount, PlaceOfPublication, Publisher, ISBN, authors, publicationDate);
 
+            var newName = "Метель";
             var newAnnotation = "New annotation";
-            book.ChangeAnnotation(newAnnotation);
+            var newPagesCount = 777;
+            var newPublicationDate = DateTime.Today;
+            var newPlaceOfPublication = "Ижевск";
+            var newPublisher = "Другое издательство";
+            var newAuthors = new List<Person> {new Person("Александр", "Пушкин")};
+            var newISBN = "ISBN 978-1-934293-06-5";
 
+            book.Name = newName;
+            book.Annotation = newAnnotation;
+            book.PagesCount = newPagesCount;
+            book.PublicationDate = newPublicationDate;
+            book.PlaceOfPublication = newPlaceOfPublication;
+            book.Publisher = newPublisher;
+            book.Authors = newAuthors;
+            book.ISBN = newISBN;
+
+            Assert.AreEqual(newName, book.Name);
             Assert.AreEqual(newAnnotation, book.Annotation);
+            Assert.AreEqual(newPagesCount, book.PagesCount);
+            Assert.AreEqual(newPublicationDate, book.PublicationDate);
+            Assert.AreEqual(newPlaceOfPublication, book.PlaceOfPublication);
+            Assert.AreEqual(newPublisher, book.Publisher);
+            CollectionAssert.AreEqual(newAuthors, book.Authors);
+            Assert.AreEqual(newISBN, book.ISBN);
         }
 
         [TestMethod]

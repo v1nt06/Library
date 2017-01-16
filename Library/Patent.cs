@@ -12,10 +12,10 @@ namespace Library
         public string RegistrationNumber { get; set; }
         public DateTime ApplicationDate { get; set; }
 
-        private Patent() : base() { }
+        private Patent() { }
 
         public Patent(string name, int pagesCount, string registrationNumber,
-            DateTime applicationDate, string country, IEnumerable<Person> inventors, DateTime publicationDate) : 
+            DateTime applicationDate, string country, IEnumerable<Person> inventors, DateTime publicationDate) :
             base(name, pagesCount, publicationDate)
         {
             if (inventors == null || inventors.Count() == 0)
