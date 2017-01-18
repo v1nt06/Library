@@ -83,19 +83,38 @@ namespace Library
         public static void Save(string filePath)
         {
             var xmlSerializer = new XmlSerializer(typeof(List<Document>));
-            using (var fileStream = new FileStream(filePath, FileMode.CreateNew))
+            try
             {
-                xmlSerializer.Serialize(fileStream, Documents);
+                using (var fileStream = new FileStream(filePath, FileMode.CreateNew))
+                {
+                    xmlSerializer.Serialize(fileStream, Documents);
+                }
+            }
+            catch (IOException e)
+            {
+                throw new SaveCatalogException(e.Message, e);
             }
         }
 
         public static void Load(string filePath)
         {
             var xmlSerializer = new XmlSerializer(typeof(List<Document>));
-            using (var fileStream = new FileStream(filePath, FileMode.Open))
+            try
             {
-                Add((List<Document>)xmlSerializer.Deserialize(fileStream));
+                using (var fileStream = new FileStream(filePath, FileMode.Open))
+                {
+                    Add((List<Document>) xmlSerializer.Deserialize(fileStream));
+                }
             }
+            catch (FileNotFoundException e)
+            {
+                throw new LoadCatalogException(e.Message, e);
+            }
+            catch (InvalidOperationException e)
+            {
+                throw new LoadCatalogException(e.Message, e);
+            }
+            
         }
 
         public static IEnumerable<Document> Get(Func<Document, bool> searchCriteria,
