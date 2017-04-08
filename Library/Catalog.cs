@@ -82,12 +82,13 @@ namespace Library
 
         public static void Save(string filePath)
         {
-            var xmlSerializer = new XmlSerializer(typeof(List<Document>));
+            var xmlSerializer = new XmlSerializer(typeof(CatalogContent));
             try
             {
                 using (var fileStream = new FileStream(filePath, FileMode.CreateNew))
                 {
-                    xmlSerializer.Serialize(fileStream, Documents);
+                    var catalogContent = new CatalogContent(Documents);
+                    xmlSerializer.Serialize(fileStream, catalogContent);
                 }
             }
             catch (IOException e)
@@ -98,12 +99,14 @@ namespace Library
 
         public static void Load(string filePath)
         {
-            var xmlSerializer = new XmlSerializer(typeof(List<Document>));
+            var xmlSerializer = new XmlSerializer(typeof(CatalogContent));
             try
             {
                 using (var fileStream = new FileStream(filePath, FileMode.Open))
                 {
-                    Add((List<Document>) xmlSerializer.Deserialize(fileStream));
+                    var catalogContent = (CatalogContent)xmlSerializer.Deserialize(fileStream);
+                    Add(catalogContent.Documents);
+
                 }
             }
             catch (FileNotFoundException e)
@@ -114,7 +117,7 @@ namespace Library
             {
                 throw new LoadCatalogException(e.Message, e);
             }
-            
+
         }
 
         public static IEnumerable<Document> Get(Func<Document, bool> searchCriteria,

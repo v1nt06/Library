@@ -47,6 +47,7 @@
   <ItemGroup>
     <Compile Include="Book.cs" />
     <Compile Include="Catalog.cs" />
+    <Compile Include="CatalogContent.cs" />
     <Compile Include="Document.cs" />
     <Compile Include="LoadCatalogException.cs" />
     <Compile Include="Newspaper.cs" />
@@ -57,15 +58,12 @@
     <Compile Include="SaveCatalogException.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="CatalogContent.xsd">
-      <SubType>Designer</SubType>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
+    <Content Include="CatalogContent.xml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="CatalogContent.xml">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
+    <None Include="Documents.xsd">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
