@@ -1,0 +1,44 @@
+﻿<?xml version="1.0"?>
+<CatalogContent xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://www.library/catalog">
+  <Documents>
+    <Book>
+      <Name>Война и мир</Name>
+      <FirstName>Война и мир</FirstName>
+      <PagesCount>1274</PagesCount>
+      <Annotation>Test annotation</Annotation>
+      <PublicationDate>1900-01-01T00:00:00</PublicationDate>
+      <PlaceOfPublication>Москва</PlaceOfPublication>
+      <Publisher>Издательство</Publisher>
+      <Authors>
+        <Person>
+          <FirstName>Lev</FirstName>
+          <LastName>Tolstoy</LastName>
+        </Person>
+      </Authors>
+      <ISBN>ISBN 978-3-16-148410-0</ISBN>
+    </Book>
+    <Newspaper>
+      <Name>Коммерсант</Name>
+      <PagesCount>30</PagesCount>
+      <PublicationDate>2016-12-01T00:00:00</PublicationDate>
+      <PlaceOfPublication>Архангельск</PlaceOfPublication>
+      <Publisher>Издательство</Publisher>
+      <Number>1</Number>
+      <ISSN>ISSN 0378-5955</ISSN>
+    </Newspaper>
+    <Patent>
+      <Name>Телефон</Name>
+      <PagesCount>50</PagesCount>
+      <PublicationDate>2016-12-01T00:00:00</PublicationDate>
+      <Inventors>
+        <Person>
+          <FirstName>Ivan</FirstName>
+          <LastName>Ivanov</LastName>
+        </Person>
+      </Inventors>
+      <Country>Россия</Country>
+      <ApplicationDate>2016-12-01T00:00:00</ApplicationDate>
+      <RegistrationNumber>123456</RegistrationNumber>
+    </Patent>
+  </Documents>
+</CatalogContent>

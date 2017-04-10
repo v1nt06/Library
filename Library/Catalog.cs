@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Xml;
+using System.Xml.Schema;
 using System.Xml.Serialization;
 
 namespace Library
@@ -82,7 +84,7 @@ namespace Library
 
         public static void Save(string filePath)
         {
-            var xmlSerializer = new XmlSerializer(typeof(CatalogContent));
+            var xmlSerializer = new XmlSerializer(typeof(CatalogContent), "http://www.library/catalog");
             try
             {
                 using (var fileStream = new FileStream(filePath, FileMode.CreateNew))
@@ -97,9 +99,24 @@ namespace Library
             }
         }
 
-        public static void Load(string filePath)
+        public static void Load(string filePath, string xmlSchema, string xslt = null)
         {
-            var xmlSerializer = new XmlSerializer(typeof(CatalogContent));
+            if (!string.IsNullOrEmpty(xslt))
+            {
+                TransformXml();
+            }
+            CheckXml(filePath, xmlSchema);
+            DeserializeXml(filePath);
+        }
+
+        private static void TransformXml()
+        {
+
+        }
+
+        private static void DeserializeXml(string filePath)
+        {
+            var xmlSerializer = new XmlSerializer(typeof(CatalogContent), "http://www.library/catalog");
             try
             {
                 using (var fileStream = new FileStream(filePath, FileMode.Open))
@@ -117,7 +134,24 @@ namespace Library
             {
                 throw new LoadCatalogException(e.Message, e);
             }
+        }
 
+        private static void CheckXml(string filePath, string xmlSchema)
+        {
+            var settings = new XmlReaderSettings { ValidationType = ValidationType.Schema };
+            settings.Schemas.Add("http://www.library/catalog", xmlSchema);
+            settings.ValidationEventHandler +=
+                delegate (object sender, ValidationEventArgs e)
+                {
+                    throw new XmlSchemaValidationException($"{e.Severity}: {e.Message}", e.Exception);
+                };
+
+            using (var reader = XmlReader.Create(filePath, settings))
+            {
+                while (reader.Read())
+                {
+                }
+            }
         }
 
         public static IEnumerable<Document> Get(Func<Document, bool> searchCriteria,

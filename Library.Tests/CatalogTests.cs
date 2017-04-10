@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Xml.Schema;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Library.Tests
@@ -210,7 +211,7 @@ namespace Library.Tests
                 Catalog.Save(filePath);
                 Catalog.Clear();
                 Assert.IsTrue(File.Exists(filePath));
-                Catalog.Load(filePath);
+                Catalog.Load(filePath, "Documents.xsd");
 
                 CollectionAssert.AreEqual(originalContent, Catalog.GetCatalogContent().ToList());
             }
@@ -222,6 +223,13 @@ namespace Library.Tests
                 }
                 Catalog.Clear();
             }
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(XmlSchemaValidationException))]
+        public void CheckLoadingIncorrectXml()
+        {
+            Catalog.Load("IncorrectCatalog.xml", "Documents.xsd");
         }
 
         private Book CreateTestBook()
