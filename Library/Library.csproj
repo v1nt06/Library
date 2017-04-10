@@ -58,9 +58,6 @@
     <Compile Include="SaveCatalogException.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="CatalogContent.xml" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Documents.xsd">
       <SubType>Designer</SubType>
     </None>
