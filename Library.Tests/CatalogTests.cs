@@ -232,6 +232,21 @@ namespace Library.Tests
             Catalog.Load("IncorrectCatalog.xml", "Documents.xsd");
         }
 
+        [TestMethod]
+        public void LoadTransformedXml()
+        {
+            var book = CreateTestBook();
+            book.Annotation = "Test annotation";
+            var newspaper = new Newspaper("Коммерсант", 30, "Архангельск", "Издательство", "ISSN 0378-5955", 1, new DateTime(2016, 12, 1));
+            var patent = new Patent("Телефон", 50, "123456", new DateTime(2016, 12, 1), "Россия",
+                new List<Person> { new Person("Ivan", "Ivanov") }, new DateTime(2016, 12, 1));
+            var originalContent = new List<Document> { book, newspaper, patent };
+
+            Catalog.Load("Transformed.xml", "Documents.xsd", "Test.xslt");
+
+            CollectionAssert.AreEqual(originalContent, Catalog.GetCatalogContent().ToList());
+        }
+
         private Book CreateTestBook()
         {
             return new Book("Война и мир", 1274, "Москва", "Издательство", "ISBN 978-3-16-148410-0",

@@ -2,9 +2,12 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Xml;
 using System.Xml.Schema;
 using System.Xml.Serialization;
+using System.Xml.XPath;
+using System.Xml.Xsl;
 
 namespace Library
 {
@@ -99,19 +102,36 @@ namespace Library
             }
         }
 
-        public static void Load(string filePath, string xmlSchema, string xslt = null)
+        public static void Load(string xml, string schema, string stylesheet = null)
         {
-            if (!string.IsNullOrEmpty(xslt))
+            if (!string.IsNullOrEmpty(stylesheet))
             {
-                TransformXml();
+                xml = TransformXml(xml, stylesheet);
+                CheckXml(xml, schema);
+                DeserializeXml(xml);
+                File.Delete(xml);
             }
-            CheckXml(filePath, xmlSchema);
-            DeserializeXml(filePath);
+            else
+            {
+                CheckXml(xml, schema);
+                DeserializeXml(xml);
+            }
         }
 
-        private static void TransformXml()
+        private static string TransformXml(string xml, string stylesheet)
         {
+            var xslt = new XslCompiledTransform();
+            xslt.Load(stylesheet);
 
+            var document = new XPathDocument(xml);
+
+            xml = Guid.NewGuid() + ".xml";
+            using (var writer = new XmlTextWriter(xml, Encoding.UTF8))
+            {
+                writer.Formatting = Formatting.Indented;
+                xslt.Transform(document, null, writer);
+            }
+            return xml;
         }
 
         private static void DeserializeXml(string filePath)
