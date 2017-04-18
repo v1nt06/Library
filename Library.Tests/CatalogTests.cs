@@ -196,7 +196,7 @@ namespace Library.Tests
         [TestMethod]
         public void CheckSavingAndLoadingCatalogContent()
         {
-            var filePath = "savedContent.xml";
+            var filePath = "XML/savedContent.xml";
             try
             {
                 var book = CreateTestBook();
@@ -211,7 +211,7 @@ namespace Library.Tests
                 Catalog.Save(filePath);
                 Catalog.Clear();
                 Assert.IsTrue(File.Exists(filePath));
-                Catalog.Load(filePath, "Documents.xsd");
+                Catalog.Load(filePath, "XML/Documents.xsd");
 
                 CollectionAssert.AreEqual(originalContent, Catalog.GetCatalogContent().ToList());
             }
@@ -229,7 +229,7 @@ namespace Library.Tests
         [ExpectedException(typeof(XmlSchemaValidationException))]
         public void CheckLoadingIncorrectXml()
         {
-            Catalog.Load("IncorrectCatalog.xml", "Documents.xsd");
+            Catalog.Load("XML/IncorrectCatalog.xml", "XML/Documents.xsd");
         }
 
         [TestMethod]
@@ -242,9 +242,101 @@ namespace Library.Tests
                 new List<Person> { new Person("Ivan", "Ivanov") }, new DateTime(2016, 12, 1));
             var originalContent = new List<Document> { book, newspaper, patent };
 
-            Catalog.Load("Transformed.xml", "Documents.xsd", "Test.xslt");
+            Catalog.Load("XML/Transformed.xml", "XML/Documents.xsd", "XML/Test.xslt");
 
             CollectionAssert.AreEqual(originalContent, Catalog.GetCatalogContent().ToList());
+
+            Catalog.Clear();
+        }
+
+        [TestMethod]
+        public void SaveCatalogAsRss2()
+        {
+            var xml = "XML/rss2.xml";
+            try
+            {
+                var book = CreateTestBook();
+                book.Annotation = "Test annotation";
+                var newspaper = new Newspaper("Коммерсант", 30, "Архангельск", "Издательство", "ISSN 0378-5955", 1,
+                    new DateTime(2016, 12, 1));
+                var patent = new Patent("Телефон", 50, "123456", new DateTime(2016, 12, 1), "Россия",
+                    new List<Person> {new Person("Ivan", "Ivanov")}, new DateTime(2016, 12, 1));
+                Assert.AreEqual(0, Catalog.GetCatalogContent().Count());
+                Catalog.Add(new Document[] {book, newspaper, patent});
+
+                Catalog.Save(xml, "XML/rss2.xslt");
+
+                var expected = File.ReadAllLines("XML/rss2-expected.xml");
+                CollectionAssert.AreEqual(expected, File.ReadAllLines(xml));
+            }
+            finally
+            {
+                if (File.Exists(xml))
+                {
+                    File.Delete(xml);
+                }
+                Catalog.Clear();
+            }
+        }
+
+        [TestMethod]
+        public void SaveCatalogAsAtom()
+        {
+            var xml = "XML/atom.xml";
+            try
+            {
+                var book = CreateTestBook();
+                book.Annotation = "Test annotation";
+                var newspaper = new Newspaper("Коммерсант", 30, "Архангельск", "Издательство", "ISSN 0378-5955", 1,
+                    new DateTime(2016, 12, 1));
+                var patent = new Patent("Телефон", 50, "123456", new DateTime(2016, 12, 1), "Россия",
+                    new List<Person> { new Person("Ivan", "Ivanov") }, new DateTime(2016, 12, 1));
+                Assert.AreEqual(0, Catalog.GetCatalogContent().Count());
+                Catalog.Add(new Document[] { book, newspaper, patent });
+
+                Catalog.Save(xml, "XML/atom.xslt");
+
+                var expected = File.ReadAllLines("XML/atom-expected.xml");
+                CollectionAssert.AreEqual(expected, File.ReadAllLines(xml));
+            }
+            finally
+            {
+                if (File.Exists(xml))
+                {
+                    File.Delete(xml);
+                }
+                Catalog.Clear();
+            }
+        }
+
+        [TestMethod]
+        public void SaveCatalogAsSampleXmlFile()
+        {
+            var xml = "XML/sample.xml";
+            try
+            {
+                var book = CreateTestBook();
+                book.Annotation = "Test annotation";
+                var newspaper = new Newspaper("Коммерсант", 30, "Архангельск", "Издательство", "ISSN 0378-5955", 1,
+                    new DateTime(2016, 12, 1));
+                var patent = new Patent("Телефон", 50, "123456", new DateTime(2016, 12, 1), "Россия",
+                    new List<Person> { new Person("Ivan", "Ivanov") }, new DateTime(2016, 12, 1));
+                Assert.AreEqual(0, Catalog.GetCatalogContent().Count());
+                Catalog.Add(new Document[] { book, newspaper, patent });
+
+                Catalog.Save(xml, "XML/sample.xslt");
+
+                var expected = File.ReadAllLines("XML/sample-expected.xml");
+                CollectionAssert.AreEqual(expected, File.ReadAllLines(xml));
+            }
+            finally
+            {
+                if (File.Exists(xml))
+                {
+                    File.Delete(xml);
+                }
+                Catalog.Clear();
+            }
         }
 
         private Book CreateTestBook()

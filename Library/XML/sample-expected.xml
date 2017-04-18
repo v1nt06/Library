@@ -1,0 +1,40 @@
+﻿<catalog xmlns:lib="http://www.library/catalog">
+  <book>
+    <name>Война и мир</name>
+    <pages_count>1274</pages_count>
+    <annotation>Test annotation</annotation>
+    <publication_date>1900-01-01T00:00:00</publication_date>
+    <place_of_publication>Москва</place_of_publication>
+    <publisher>Издательство</publisher>
+    <authors>
+      <person>
+        <first_name>Lev</first_name>
+        <last_name>Tolstoy</last_name>
+      </person>
+    </authors>
+    <isbn>ISBN 978-3-16-148410-0</isbn>
+  </book>
+  <newspaper>
+    <name>Коммерсант</name>
+    <pages_count>30</pages_count>
+    <publication_date>2016-12-01T00:00:00</publication_date>
+    <place_of_publication>Архангельск</place_of_publication>
+    <publisher>Издательство</publisher>
+    <number>1</number>
+    <issn>ISSN 0378-5955</issn>
+  </newspaper>
+  <patent>
+    <name>Телефон</name>
+    <pages_count>50</pages_count>
+    <publication_date>2016-12-01T00:00:00</publication_date>
+    <inventors>
+      <person>
+        <first_name>Ivan</first_name>
+        <last_name>Ivanov</last_name>
+      </person>
+    </inventors>
+    <country>Россия</country>
+    <application_date>2016-12-01T00:00:00</application_date>
+    <registration_number>123456</registration_number>
+  </patent>
+</catalog>

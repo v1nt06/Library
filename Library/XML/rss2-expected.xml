@@ -1,0 +1,45 @@
+﻿<rss version="2.0" xmlns:lib="http://www.library/catalog">
+  <channel>
+    <description />
+    <link>http://www.library/catalog</link>
+    <title>Documents</title>
+    <lib:Book>
+      <lib:Name>Война и мир</lib:Name>
+      <lib:PagesCount>1274</lib:PagesCount>
+      <lib:Annotation>Test annotation</lib:Annotation>
+      <lib:PublicationDate>1900-01-01T00:00:00</lib:PublicationDate>
+      <lib:PlaceOfPublication>Москва</lib:PlaceOfPublication>
+      <lib:Publisher>Издательство</lib:Publisher>
+      <lib:Authors>
+        <lib:Person>
+          <lib:FirstName>Lev</lib:FirstName>
+          <lib:LastName>Tolstoy</lib:LastName>
+        </lib:Person>
+      </lib:Authors>
+      <lib:ISBN>ISBN 978-3-16-148410-0</lib:ISBN>
+    </lib:Book>
+    <lib:Newspaper>
+      <lib:Name>Коммерсант</lib:Name>
+      <lib:PagesCount>30</lib:PagesCount>
+      <lib:PublicationDate>2016-12-01T00:00:00</lib:PublicationDate>
+      <lib:PlaceOfPublication>Архангельск</lib:PlaceOfPublication>
+      <lib:Publisher>Издательство</lib:Publisher>
+      <lib:Number>1</lib:Number>
+      <lib:ISSN>ISSN 0378-5955</lib:ISSN>
+    </lib:Newspaper>
+    <lib:Patent>
+      <lib:Name>Телефон</lib:Name>
+      <lib:PagesCount>50</lib:PagesCount>
+      <lib:PublicationDate>2016-12-01T00:00:00</lib:PublicationDate>
+      <lib:Inventors>
+        <lib:Person>
+          <lib:FirstName>Ivan</lib:FirstName>
+          <lib:LastName>Ivanov</lib:LastName>
+        </lib:Person>
+      </lib:Inventors>
+      <lib:Country>Россия</lib:Country>
+      <lib:ApplicationDate>2016-12-01T00:00:00</lib:ApplicationDate>
+      <lib:RegistrationNumber>123456</lib:RegistrationNumber>
+    </lib:Patent>
+  </channel>
+</rss>

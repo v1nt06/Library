@@ -2,8 +2,7 @@
 <xsl:stylesheet version="1.0"
                 xmlns="http://www.library/catalog"
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-                xmlns:lib="http://www.library/catalog"
-                >
+                xmlns:lib="http://www.library/catalog">
 
 <xsl:output method="xml" indent="yes" />
 

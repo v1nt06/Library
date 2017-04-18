@@ -67,12 +67,21 @@ namespace Library
                 .Cast<Book>().OrderBy(b => b.Publisher);
         }
 
-        public static void Save(string filePath)
+        public static void Save(string path, string stylesheet = null)
+        {
+            SaveXml(path);
+            if (!string.IsNullOrEmpty(stylesheet))
+            {
+                TransformXml(path, stylesheet, false);
+            }
+        }
+
+        private static void SaveXml(string path)
         {
             var xmlSerializer = new XmlSerializer(typeof(CatalogContent), "http://www.library/catalog");
             try
             {
-                using (var fileStream = new FileStream(filePath, FileMode.CreateNew))
+                using (var fileStream = new FileStream(path, FileMode.CreateNew))
                 {
                     var catalogContent = new CatalogContent(Documents);
                     xmlSerializer.Serialize(fileStream, catalogContent);
@@ -100,14 +109,18 @@ namespace Library
             }
         }
 
-        private static string TransformXml(string xml, string stylesheet)
+        private static string TransformXml(string xml, string stylesheet, bool rename = true)
         {
             var xslt = new XslCompiledTransform();
             xslt.Load(stylesheet);
 
             var document = new XPathDocument(xml);
 
-            xml = Guid.NewGuid() + ".xml";
+            if (rename)
+            {
+                xml = Guid.NewGuid() + ".xml";
+            }
+
             using (var writer = new XmlTextWriter(xml, Encoding.UTF8))
             {
                 writer.Formatting = Formatting.Indented;
