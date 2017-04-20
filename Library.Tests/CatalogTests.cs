@@ -339,6 +339,26 @@ namespace Library.Tests
             }
         }
 
+        [TestMethod]
+        public void CreateReport()
+        {
+            var report = "XML/report.html";
+            try
+            {
+                Catalog.CreateReport("XML/SourceData.xml", "XML/Test.xslt", report);
+
+                CollectionAssert.AreEqual(File.ReadAllLines("XML/report-expected.html"), File.ReadAllLines(report));
+            }
+            finally
+            {
+                if (File.Exists(report))
+                {
+                    File.Delete(report);
+                }
+                Catalog.Clear();
+            }
+        }
+
         private Book CreateTestBook()
         {
             return new Book("Война и мир", 1274, "Москва", "Издательство", "ISBN 978-3-16-148410-0",

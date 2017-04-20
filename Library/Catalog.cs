@@ -93,7 +93,7 @@ namespace Library
             }
         }
 
-        public static void Load(string xml, string schema, string stylesheet = null)
+        public static void Load(string xml, string schema = "XML/Documents.xsd", string stylesheet = null)
         {
             if (!string.IsNullOrEmpty(stylesheet))
             {
@@ -183,6 +183,12 @@ namespace Library
         public static void Clear()
         {
             Documents.Clear();
+        }
+
+        public static void CreateReport(string xml, string stylesheet, string reportPath)
+        {
+            Load(xml, stylesheet: stylesheet);
+            Save(reportPath, "XML/Report.xslt");
         }
     }
 }

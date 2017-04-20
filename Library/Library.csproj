@@ -64,6 +64,12 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="XML\OriginalSourceData.xml">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="XML\Report.xslt">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="XML\sample.xslt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -83,6 +89,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="XML\sample-expected.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="XML\SourceData.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="XML\Test.xslt">

@@ -9,11 +9,13 @@
       <xs:sequence minOccurs="1" maxOccurs="1">
         <xs:element name="Documents">
           <xs:complexType>
-            <xs:all minOccurs="0">
-              <xs:element ref="Book"/>
-              <xs:element ref="Newspaper"/>
-              <xs:element ref="Patent"/>
-            </xs:all>
+            <xs:sequence minOccurs="0" maxOccurs="unbounded">
+              <xs:choice>
+                <xs:element ref="Book"/>
+                <xs:element ref="Newspaper"/>
+                <xs:element ref="Patent"/>
+              </xs:choice>
+            </xs:sequence>
           </xs:complexType>
         </xs:element>
       </xs:sequence>
@@ -25,13 +27,13 @@
       <xs:sequence>
         <xs:element name="Name" type="xs:string"/>
         <xs:element name="PagesCount" type="xs:int"/>
-        <xs:element name="Annotation" type="xs:string"/>
+        <xs:element name="Annotation" type="xs:string" minOccurs="0" maxOccurs="1"/>
         <xs:element name="PublicationDate" type="xs:dateTime"/>
         <xs:element name="PlaceOfPublication" type="xs:string"/>
         <xs:element name="Publisher" type="xs:string"/>
         <xs:element name="Authors">
           <xs:complexType>
-            <xs:sequence minOccurs="1">
+            <xs:sequence minOccurs="1" maxOccurs="unbounded">
               <xs:element ref="Person"/>
             </xs:sequence>
           </xs:complexType>
@@ -63,7 +65,7 @@
         <xs:element name="PublicationDate" type="xs:dateTime"/>
         <xs:element name="Inventors">
           <xs:complexType>
-            <xs:sequence minOccurs="1">
+            <xs:sequence minOccurs="1" maxOccurs="unbounded">
               <xs:element ref="Person"/>
             </xs:sequence>
           </xs:complexType>
