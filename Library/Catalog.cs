@@ -112,7 +112,8 @@ namespace Library
         private static string TransformXml(string xml, string stylesheet, bool rename = true)
         {
             var xslt = new XslCompiledTransform();
-            xslt.Load(stylesheet);
+            var settings = new XsltSettings { EnableScript = true };
+            xslt.Load(stylesheet, settings, new XmlUrlResolver());
 
             var document = new XPathDocument(xml);
 

@@ -10,7 +10,7 @@
   <msxsl:script language="JScript" implements-prefix="lib">
     function today()
     {
-    return (new Date()).toString();
+      return (new Date()).toString();
     }
   </msxsl:script>
 
@@ -91,11 +91,67 @@
           <tr>
             <th>First name</th>
             <th>Last name</th>
+            <th>Works</th>
+            <th>Works count</th>
           </tr>
-          <xsl:apply-templates select="//lib:Person"/>
+          <xsl:for-each select="//lib:Person">
+            <xsl:call-template name="AuthorsList">
+              <xsl:with-param name="firstName" select="node()[2]"/>
+              <xsl:with-param name="lastName" select="node()[4]"/>
+            </xsl:call-template>
+          </xsl:for-each>
+          <tr>
+            <td>
+              <b>Total authors:</b>
+            </td>
+            <td>
+              <xsl:value-of select="count(//lib:Person[not(. = preceding::lib:Person)])"/>
+            </td>
+            <td>
+              <b>Total works:</b>
+            </td>
+            <td>
+              <xsl:value-of select="count(//lib:Documents/*[descendant::lib:Person])"/>
+            </td>
+          </tr>
         </table>
       </body>
     </html>
+  </xsl:template>
+
+  <xsl:key name="fullName" match="//lib:Person" use="node()[2]/text() + node()[4]/text()"/>
+
+  <xsl:template name="AuthorsList">
+    <xsl:param name="firstName"/>
+    <xsl:param name="lastName"/>
+    <xsl:variable name="count" select="count(node()/following::lib:Person[lib:FirstName[text() = $firstName] and lib:LastName[text() = $lastName]])"/>
+    <xsl:if test="$count = 0">
+      <xsl:call-template name="AuthorsTable">
+        <xsl:with-param name="firstName" select="$firstName"/>
+        <xsl:with-param name="lastName" select="$lastName"/>
+      </xsl:call-template>
+    </xsl:if>
+  </xsl:template>
+  
+  <xsl:template name="AuthorsTable">
+    <xsl:param name="firstName"/>
+    <xsl:param name="lastName"/>
+    <tr>
+      <td>
+        <xsl:value-of select="$firstName"/>
+      </td>
+      <td>
+        <xsl:value-of select="$lastName"/>
+      </td>
+      <td>
+        <xsl:for-each select="//lib:Documents/*[descendant::lib:Person[lib:FirstName[text() = $firstName] and lib:LastName[text() = $lastName]]]/lib:Name">
+          <xsl:value-of select="node()"/><br/>
+        </xsl:for-each>
+      </td>
+      <td>
+        <xsl:value-of select="count(//lib:Person[lib:FirstName[text() = $firstName] and lib:LastName[text() = $lastName]])"/>
+      </td>
+    </tr>
   </xsl:template>
 
   <xsl:template name="head">
