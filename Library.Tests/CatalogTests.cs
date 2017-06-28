@@ -211,7 +211,7 @@ namespace Library.Tests
                 Catalog.Save(filePath);
                 Catalog.Clear();
                 Assert.IsTrue(File.Exists(filePath));
-                Catalog.Load(filePath, "XML/Documents.xsd");
+                Catalog.Load(filePath);
 
                 CollectionAssert.AreEqual(originalContent, Catalog.GetCatalogContent().ToList());
             }
@@ -229,7 +229,7 @@ namespace Library.Tests
         [ExpectedException(typeof(XmlSchemaValidationException))]
         public void CheckLoadingIncorrectXml()
         {
-            Catalog.Load("XML/IncorrectCatalog.xml", "XML/Documents.xsd");
+            Catalog.Load("XML/IncorrectCatalog.xml");
         }
 
         [TestMethod]
@@ -353,6 +353,8 @@ namespace Library.Tests
 
                 for (var i = 0; i < expectedLines.Length; i++)
                 {
+                    // Checking all lines in report files except for line 10 (index 9) and line 110 (index 109)
+                    // becasue this lines contains current date and time.
                     if (i != 9 && i != 109)
                     {
                         Assert.AreEqual(expectedLines[i], actualLines[i]);
